@@ -7,6 +7,9 @@ import os, sys
 # Disciplina: Sistemas Evolutivo 2013/2
 
 
+## Estrutura de dados
+
+
 ## Inicializa a matriz
 def inicializaC():
 	## Peso
