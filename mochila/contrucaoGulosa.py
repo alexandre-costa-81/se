@@ -11,13 +11,15 @@ import os, sys
 
 
 ## Inicializa a matriz
-def inicializaC():
+def inicializaCG():
 	## Peso
 	w = [4,5,7,9,6]
 	## Valor
 	p = [2,2,3,4,4]
 	## Objetos
 	j = [w,p]
+    ## Capacidade
+	b = 23
 
 	return j
 
@@ -37,12 +39,13 @@ def melhor(lista):
 ## function ConstrucaoGulosa
 def construcaoGulosa():
 	s = [[],[]]
-	c = inicializaC()
-	print c
-	for i in range(len(c[0])):
-		m = melhor(c)
-		s[0].insert(len(s[0]),c[0].pop(m))
-		s[1].insert(len(s[1]),c[1].pop(m))
+	C = inicializaCG()
+	print C
+	for i in range(len(C[0])):
+		m = melhor(C)
+		s[0].insert(len(s[0]),C[0].pop(m))
+		s[1].insert(len(s[1]),C[1].pop(m))
+	print C
 	return s
 
 
