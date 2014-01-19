@@ -38,10 +38,13 @@ def def_var():
 	global root
 	global canvas
 	global cell
+	global tx
+	global ty
 
 	# INICIALIZA VARIAVEIS
 	## Variaveis de configuração do automato celular
-	N = 51
+	tx = 50
+	ty = 50
 	l = 2
 	m = 2
 	n = 2
@@ -49,25 +52,15 @@ def def_var():
 	y = [0 for col in range(l)]
 	m = [0 for col in range(m)]
 	o = [0 for col in range(n)]
-	alpha = [[[y, m, o] for j in range(N)] for i in range(N)]
+	alpha = [[[y, m, o] for row in range(tx)] for col in range(ty)]
 	MAX = 1000
-	a = [[0 for j in range(-1, N)] for i in range(-1, N)] 
-	k = [[0 for j in range(-1, N)] for i in range(-1, N)] 
-
-	## Variaveis para desenho no ecran
-	XY = 10
-	root = Tk()
-	root.title("Simulador do Ambiênte")
-	canvas = Canvas(root, width=500, height=500, highlightthickness=0, bd=0, bg='black')
-	cell = [[0 for j in range(-1, N)] for i in range(-1, N)]
-	for i in range(N):
-		for j in range(N):
-			cell[i][j] = canvas.create_oval((i*XY, j*XY, i*XY+XY, j*XY+XY),outline="gray",fill="black")
+	a = [[0 for row in range(-1,tx+1)] for col in range(-1,ty+1)]
+	k = [[0 for row in range(tx)] for col in range(ty)]
 
 # --------------------------------------------- #
 def callback(a, aux_cont):
     aux_cont = aux_cont + 1
-    print "t = %d" %(aux_cont+1)
+    print "Tempo = %d" %(aux_cont+1)
     destroy_bt()
     a = geracao(a, aux_cont)
     monta(a, aux_cont)
@@ -75,7 +68,7 @@ def callback(a, aux_cont):
 # --------------------------------------------- #
 def callback_2(a, aux_cont):
     aux_cont = aux_cont + 1
-    print "t = %d" %(aux_cont+1)
+    print "Tempo = %d" %(aux_cont+1)
     destroy_bt()
     a = geracao(a, aux_cont)
     monta(a, aux_cont)
@@ -90,33 +83,19 @@ def destroy_bt():
 
 # --------------------------------------------- #
 def geracao(a, aux_cont):
-	for i in range(N):
-		for j in range(N):
-			if a[i][j] == 0:
-				canvas.itemconfig(cell[i][j], fill="black")
-			else:
-				canvas.itemconfig(cell[i][j], fill="green")
-	canvas.pack()
-
-	for i in range(N):
-		for j in range(N):
+	encontrou = 0
+	for j in range(ty):
+		for i in range(tx):
 			if a[i][j] == 0:
 				vizinho1, vizinho2, encontrou = retornaVizinhaca(i, j)
-				print i, j
-				if encontrou == 1:
+				if encontrou == 2:
 					a[i][j] = 1
-					alpha[i][j] = vizinho1
-					
-					#k[i][j] = 1
+					print "a[%d][%d] = %d - TEM: %d VIZINHO(S)" %(i, j, a[i][j], encontrou)
 				else:
-					#if p(alpha[i][j]) == L:
-					a[i][j] = 0
-					k[i][j] = 0
-					#else:
-					#	a[i][j] = 1
-			else:
-				a[i][j] = 1
-#				k = 1
+					print "a[%d][%d] = %d - TEM: %d VIZINHO(S)" %(i, j, a[i][j], encontrou)
+	#		else:
+		#		print "Eveolui celula."
+		#	encountrou = 0
 
 	return a
 
@@ -124,74 +103,107 @@ def geracao(a, aux_cont):
 def retornaVizinhaca(i, j):
 	vizinho1 = []
 	vizinho2 = []
-	if a[i][j-1] == 1:
-		vizinho1 = alpha[i][j-1]
-	elif a[i+1][j-1] == 1:
+	numVizinhos = 0
+
+	if a[i][j-1] == 1 and numVizinhos < 2:
+		numVizinhos += 1
+		if vizinho1 == []:
+			vizinho1 = alpha[i][j-1]
+		else:
+			vizinho2 = alpha[i][j-1]
+
+	if a[i+1][j-1] == 1 and numVizinhos < 2:
+		numVizinhos += 1
 		if vizinho1 == []:
 			vizinho1 = alpha[i+1][j-1]
 		else:
 			vizinho2 = alpha[i+1][j-1]
-	elif a[i+1][j] == 1:
+
+	if a[i+1][j] == 1 and numVizinhos < 2:
+		numVizinhos += 1
 		if vizinho1 == []:
 			vizinho1 = alpha[i+1][j]
 		else:
 			vizinho2 = alpha[i+1][j]
-	elif a[i+1][j+1] == 1:
+
+	if a[i+1][j+1] == 1 and numVizinhos < 2:
+		numVizinhos += 1
 		if vizinho1 == []:
 			vizinho1 = alpha[i+1][j+1]
 		else:
 			vizinho2 = alpha[i+1][j+1]
-	elif a[i][j+1] == 1:
+
+	if a[i][j+1] == 1 and numVizinhos < 2:
+		numVizinhos += 1
 		if vizinho1 == []:
 			vizinho1 = alpha[i][j+1]
 		else:
 			vizinho2 = alpha[i][j+1]
-	elif a[i-1][j+1] == 1:
+
+	if a[i-1][j+1] == 1 and numVizinhos < 2:
+		numVizinhos += 1
 		if vizinho1 == []:
 			vizinho1 = alpha[i-1][j+1]
 		else:
 			vizinho2 = alpha[i-1][j+1]
-	elif a[i-1][j] == 1:
+
+	if a[i-1][j] == 1 and numVizinhos < 2:
+		numVizinhos += 1
 		if vizinho1 == []:
 			vizinho1 = alpha[i-1][j]
 		else:
 			vizinho2 = alpha[i-1][j]
-	elif a[i-1][j-1] == 1:
+
+	if a[i-1][j-1] == 1 and numVizinhos < 2:
+		numVizinhos += 1
 		if vizinho1 == []:
 			vizinho1 = alpha[i-1][j-1]
 		else:
 			vizinho2 = alpha[i-1][j-1]
 
-	if vizinho1 == [] or vizinho1 == []:
-		return vizinho1, vizinho2, 0
+	if numVizinhos == 2:
+		return vizinho1, vizinho2, numVizinhos
 	else:
-		return vizinho1, vizinho2, 1
+		return vizinho1, vizinho2, numVizinhos
+
+# --------------------------------------------- #
+def p(alpha):
+	age = 0
+	for j in range(3):
+		if j == 0:
+			for i in range(l):
+				if alplha[i][j] == 1
+					age += 1
+		if j == 1:
+			for i in range(m):
+				if alplha[i][j] == 1
+					age += 1
+
+		if j == 2:
+			for i in range(n):
+				if alplha[i][j] == 1
+					age += 1
+
+	return age
 
 
 # --------------------------------------------- #
 def monta(a, aux_cont):
-	for i in range(N):
-		for j in range(N):
+	for j in range(ty):
+		for i in range(tx):
 			if a[i][j] == 0:
 				canvas.itemconfig(cell[i][j], fill="black")
 			else:
 				canvas.itemconfig(cell[i][j], fill="green")
 
-    # (Re)define Botões
+# (Re)define Botões
 	global bt1
 	global bt2
-	bt1 = Button(root, text="PRÓXIMA GERAÇAO", command=lambda: callback(m, n, aux_cont))
-	bt2 = Button(root, text="PLAY", command=lambda: callback_2(m, n, aux_cont))
+	bt1 = Button(root, text="PRÓXIMA GERAÇAO", command=lambda: callback(a, aux_cont))
+	bt2 = Button(root, text="PLAY", command=lambda: callback_2(a, aux_cont))
+	canvas.pack()
 	bt1.pack()
 	bt2.pack()
-	canvas.pack()
-    #
-
-	if aux_cont == 0:
-		print 'nnn1'
-		root.mainloop()
-		def_var()
-
 	return
 
 #   MAIN   #
@@ -199,130 +211,26 @@ if __name__ == "__main__":
 	aux_cont = 0
 	def_var()
 
-	a = [[0 for j in range(-1, N)] for i in range(-1, N)] 
 	a[3][3] = 1
 	a[4][2] = 1	
 	alpha[3][3] = [[0,1],[0,0],[0,0]]
 	alpha[4][2] = [[0,1],[0,0],[0,0]]
 
-	a = geracao(a, aux_cont)
+
+	## Variaveis para desenho no ecran
+	XY = 10
+	root = Tk()
+	root.title("Simulador do Ambiênte")
+
+	canvas  = Canvas(root, width=ty*10, height=tx*10, highlightthickness=0, bd=0, bg='black')
+	cell = [[0 for row in range(-1,tx+1)] for col in range(-1,ty+1)]
+
+	for j in range(ty):
+		for i in range(tx):
+			cell[i][j] = canvas.create_oval((i*XY, j*XY, i*XY+XY, j*XY+XY),outline="gray",fill="black")
+
 	monta(a, aux_cont)
 
-"""
-
-def frame():
-#	processa()
-	geracao()
-	desenha()
-	root.after(100, frame)
-
-def desenha():
-	for i in range(N):
-		for j in range(N):
-			if a[i][j]==0:
-				canvas.itemconfig(cell[i][j], fill="black")
-			else:
-				canvas.itemconfig(cell[i][j], fill="green")
-
-## Funções do automato celular
-def geracao():
-	for i in range(N):
-		for j in range(N):
-			if a[i][j] == 0:
-				vizinho1, vizinho2, encontrou = retornaVizinhaca(i, j)
-				print i, j
-				if encontrou == 1:
-					a[i][j] = 1
-					alpha[i][j] = vizinho1
-					
-					#k[i][j] = 1
-				else:
-					if p(alpha[i][j]) == L:
-						a[i][j] = 0
-						k[i][j] = 0
-					else:
-						a[i][j] = 1
-			else:
-				k = 1
-
-	for i in range(N):
-		for j in range(N):
-			if a[i][j] == 0:
-				canvas.itemconfig(cell[i][j], fill="black")
-			else:
-				canvas.itemconfig(cell[i][j], fill="green")
-    #canvas.pack()
-	return
-
-def retornaVizinhaca(i, j):
-	vizinho1 = []
-	vizinho2 = []
-	if a[i][j-1] == 1:
-		vizinho1 = alpha[i][j-1]
-	elif a[i+1][j-1] == 1:
-		if vizinho1 == []:
-			vizinho1 = alpha[i+1][j-1]
-		else:
-			vizinho2 = alpha[i+1][j-1]
-	elif a[i+1][j] == 1:
-		if vizinho1 == []:
-			vizinho1 = alpha[i+1][j]
-		else:
-			vizinho2 = alpha[i+1][j]
-	elif a[i+1][j+1] == 1:
-		if vizinho1 == []:
-			vizinho1 = alpha[i+1][j+1]
-		else:
-			vizinho2 = alpha[i+1][j+1]
-	elif a[i][j+1] == 1:
-		if vizinho1 == []:
-			vizinho1 = alpha[i][j+1]
-		else:
-			vizinho2 = alpha[i][j+1]
-	elif a[i-1][j+1] == 1:
-		if vizinho1 == []:
-			vizinho1 = alpha[i-1][j+1]
-		else:
-			vizinho2 = alpha[i-1][j+1]
-	elif a[i-1][j] == 1:
-		if vizinho1 == []:
-			vizinho1 = alpha[i-1][j]
-		else:
-			vizinho2 = alpha[i-1][j]
-	elif a[i-1][j-1] == 1:
-		if vizinho1 == []:
-			vizinho1 = alpha[i-1][j-1]
-		else:
-			vizinho2 = alpha[i-1][j-1]
-
-	if vizinho1 == [] or vizinho1 == []:
-		return vizinho1, vizinho2, 0
-	else:
-		return vizinho1, vizinho2, 1
-
-def cruzamentoGenetico():
-	return 0
-
-def p(alphaij):
-	return 0
-
-def pk(alphaij):
-	return 0
-
-def geraPopulacao():
-	a[3][3] = 1
-	a[4][2] = 1	
-	alpha[3][3] = [[0,1],[0,0],[0,0]]
-	alpha[4][2] = [[0,1],[0,0],[0,0]]
-
-
-# MAIN
-
-canvas.pack()
-geraPopulacao()
-carrega()
-frame()
-root.mainloop()
-"""
+	root.mainloop()
 
 
