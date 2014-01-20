@@ -167,25 +167,25 @@ def retornaVizinhaca(i, j):
 		return vizinho1, vizinho2, numVizinhos
 
 # --------------------------------------------- #
-def p(alpha):
+def p(alpha, i, j):
 	age = 0
-	for j in range(3):
-		if j == 0:
-			for i in range(l):
-				if alplha[i][j] == 1
-					age += 1
-		if j == 1:
-			for i in range(m):
-				if alplha[i][j] == 1
+	for col in range(3):
+		if col == 0:
+			for row in range(l):
+				if alpha[i][j][col][row] == 1:
 					age += 1
 
-		if j == 2:
-			for i in range(n):
-				if alplha[i][j] == 1
+		if col == 1:
+			for row in range(l):
+				if alpha[i][j][col][row] == 1:
+					age += 1
+
+		if col == 2:
+			for row in range(l):
+				if alpha[i][j][col][row] == 1:
 					age += 1
 
 	return age
-
 
 # --------------------------------------------- #
 def monta(a, aux_cont):
@@ -213,9 +213,10 @@ if __name__ == "__main__":
 
 	a[3][3] = 1
 	a[4][2] = 1	
-	alpha[3][3] = [[0,1],[0,0],[0,0]]
-	alpha[4][2] = [[0,1],[0,0],[0,0]]
+	alpha[3][3] = [[1,1],[1,1],[1,1]]
+	alpha[4][2] = [[1,0],[0,0],[0,0]]
 
+	print p(alpha, 3, 3)
 
 	## Variaveis para desenho no ecran
 	XY = 10
