@@ -11,7 +11,7 @@ Created: 15/01/2014
 from Tkinter import *
 import random
 import time
-import pdb
+
 # GLOBAL
 
 
@@ -90,10 +90,10 @@ def geracao(a, aux_cont):
 				alpha1, alpha2, encontrou = find_two_mature_neighbors(i, j)
 				if encontrou == 2:
 					a[i][j] = 1
-#					beta1, beta2 = crossover(alpha1,alpha2)
+					beta1, beta2 = crossover(alpha1,alpha2)
 
-					#alpha[i][j] = beta if random.randint(1,2) == 1 else beta2
-
+					alpha[i][j] = beta1 if random.randint(1,2) == 1 else beta2
+					#print alpha[i][j]
 					k[i][j] = 1
 					#print "a[%d][%d] = %d - TEM: %d VIZINHO(S)" %(i, j, a[i][j], encontrou)
 			else:
@@ -102,6 +102,7 @@ def geracao(a, aux_cont):
 					a[i][j] = 0
 				else:
 					k[i][j] = pk(alpha[i][j],k[i][j])
+					k[i][j] += 1
 
 	return a
 
@@ -111,56 +112,56 @@ def find_two_mature_neighbors(i, j):
 	alpha2 = []
 	numVizinhos = 0
 
-	if a[i][j-1] == 1 and numVizinhos < 2 and alpha[i][j-1] >= l and alpha[i][j-1] < l+m:
+	if a[i][j-1] == 1 and numVizinhos < 2 and k[i][j-1] >= l and k[i][j-1] < l+m:
 		numVizinhos += 1
 		if alpha1 == []:
 			alpha1 = alpha[i][j-1]
 		else:
 			alpha2 = alpha[i][j-1]
 
-	if a[i+1][j-1] == 1 and numVizinhos < 2 and alpha[i+1][j-1] >= l and alpha[i+1][j-1] < l+m:
+	if a[i+1][j-1] == 1 and numVizinhos < 2 and k[i+1][j-1] >= l and k[i+1][j-1] < l+m:
 		numVizinhos += 1
 		if alpha1 == []:
 			alpha1 = alpha[i+1][j-1]
 		else:
 			alpha2 = alpha[i+1][j-1]
 
-	if a[i+1][j] == 1 and numVizinhos < 2 and alpha[i+1][j] >= l and alpha[i+1][j] < l+m:
+	if a[i+1][j] == 1 and numVizinhos < 2 and k[i+1][j] >= l and k[i+1][j] < l+m:
 		numVizinhos += 1
 		if alpha1 == []:
 			alpha1 = alpha[i+1][j]
 		else:
 			alpha2 = alpha[i+1][j]
 
-	if a[i+1][j+1] == 1 and numVizinhos < 2 and alpha[i+1][j+1] >= l and alpha[i+1][j+1] < l+m:
+	if a[i+1][j+1] == 1 and numVizinhos < 2 and k[i+1][j+1] >= l and k[i+1][j+1] < l+m:
 		numVizinhos += 1
 		if alpha1 == []:
 			alpha1 = alpha[i+1][j+1]
 		else:
 			alpha2 = alpha[i+1][j+1]
 
-	if a[i][j+1] == 1 and numVizinhos < 2 and alpha[i][j+1] >= l and alpha[i][j+1] < l+m:
+	if a[i][j+1] == 1 and numVizinhos < 2 and k[i][j+1] >= l and k[i][j+1] < l+m:
 		numVizinhos += 1
 		if alpha1 == []:
 			alpha1 = alpha[i][j+1]
 		else:
 			alpha2 = alpha[i][j+1]
 
-	if a[i-1][j+1] == 1 and numVizinhos < 2 and alpha[i-1][j+1] >= l and alpha[i-1][j+1] < l+m:
+	if a[i-1][j+1] == 1 and numVizinhos < 2 and k[i-1][j+1] >= l and k[i-1][j+1] < l+m:
 		numVizinhos += 1
 		if alpha1 == []:
 			alpha1 = alpha[i-1][j+1]
 		else:
 			alpha2 = alpha[i-1][j+1]
 
-	if a[i-1][j] == 1 and numVizinhos < 2 and alpha[i-1][j] >= l and alpha[i-1][j] < l+m:
+	if a[i-1][j] == 1 and numVizinhos < 2 and k[i-1][j] >= l and k[i-1][j] < l+m:
 		numVizinhos += 1
 		if alpha1 == []:
 			alpha1 = alpha[i-1][j]
 		else:
 			alpha2 = alpha[i-1][j]
 
-	if a[i-1][j-1] == 1 and numVizinhos < 2 and alpha[i-1][j-1] >= l and alpha[i-1][j-1] < l+m:
+	if a[i-1][j-1] == 1 and numVizinhos < 2 and k[i-1][j-1] >= l and k[i-1][j-1] < l+m:
 		numVizinhos += 1
 		if alpha1 == []:
 			alpha1 = alpha[i-1][j-1]
@@ -192,12 +193,10 @@ def p(alpha):
 
 # --------------------------------------------- #
 def pk(alpha, k):
-
 	if p(alpha) >= k:
 		return k
 	else:
-		k = k + 1
-		return k
+		return p(alpha)
 
 
 def crossover(alpha1, alpha2):
@@ -218,7 +217,12 @@ def monta(a, aux_cont):
 			if a[i][j] == 0:
 				canvas.itemconfig(cell[i][j], fill="black")
 			else:
-				canvas.itemconfig(cell[i][j], fill="green")
+				if p(alpha[i][j]) < l:
+					canvas.itemconfig(cell[i][j], fill="yellow")
+				if p(alpha[i][j]) >= l and p(alpha[i][j]) < (l+m):
+					canvas.itemconfig(cell[i][j], fill="red")
+				else:
+					canvas.itemconfig(cell[i][j], fill="blue")
 
 # (Re)define Botões
 	global bt1
@@ -237,8 +241,8 @@ if __name__ == "__main__":
 
 	a[3][3] = 1
 	a[4][2] = 1	
-	alpha[3][3] = [1,1,1,1,1,1]
-	alpha[4][2] = [[1,0],[0,0],[0,0]]
+	alpha[3][3] = [1,1,1,0,0,0]
+	alpha[4][2] = [0,0,0,1,1,1]
 
 	print p(alpha[3][3])
 
