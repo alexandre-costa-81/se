@@ -11,7 +11,7 @@ Created: 15/01/2014
 from Tkinter import *
 import random
 import time
-
+import pdb
 # GLOBAL
 
 
@@ -52,7 +52,7 @@ def def_var():
 	#youth = [0 for col in range(l)]
 	#maturity = [0 for col in range(m)]
 	#old = [0 for col in range(n)]
-	alpha = [[[0 for col in range(L)] for row in range(tx)] for col in range(ty)]
+	alpha = [[[0 for col in range(-1, L+1)] for row in range(tx)] for col in range(ty)]
 	MAX = 1000
 	a = [[0 for row in range(-1,tx+1)] for col in range(-1,ty+1)]
 	k = [[0 for row in range(-1,tx+1)] for col in range(-1,ty+1)]
@@ -96,10 +96,12 @@ def geracao(a, aux_cont):
 
 					k[i][j] = 1
 					#print "a[%d][%d] = %d - TEM: %d VIZINHO(S)" %(i, j, a[i][j], encontrou)
-				else:
-					print "a[%d][%d] = %d - TEM: %d VIZINHO(S)" %(i, j, a[i][j], encontrou)
 			else:
-				print "Eveolui celula."
+				if pk(alpha[i][j],k[i][j]) == p(alpha[i][j]):
+					k[i][j] = 0
+					a[i][j] = 0
+				else:
+					k[i][j] = pk(alpha[i][j],k[i][j])
 
 	return a
 
@@ -109,56 +111,56 @@ def find_two_mature_neighbors(i, j):
 	alpha2 = []
 	numVizinhos = 0
 
-	if a[i][j-1] == 1 and numVizinhos < 2:
+	if a[i][j-1] == 1 and numVizinhos < 2 and alpha[i][j-1] >= l and alpha[i][j-1] < l+m:
 		numVizinhos += 1
 		if alpha1 == []:
 			alpha1 = alpha[i][j-1]
 		else:
 			alpha2 = alpha[i][j-1]
 
-	if a[i+1][j-1] == 1 and numVizinhos < 2:
+	if a[i+1][j-1] == 1 and numVizinhos < 2 and alpha[i+1][j-1] >= l and alpha[i+1][j-1] < l+m:
 		numVizinhos += 1
 		if alpha1 == []:
 			alpha1 = alpha[i+1][j-1]
 		else:
 			alpha2 = alpha[i+1][j-1]
 
-	if a[i+1][j] == 1 and numVizinhos < 2:
+	if a[i+1][j] == 1 and numVizinhos < 2 and alpha[i+1][j] >= l and alpha[i+1][j] < l+m:
 		numVizinhos += 1
 		if alpha1 == []:
 			alpha1 = alpha[i+1][j]
 		else:
 			alpha2 = alpha[i+1][j]
 
-	if a[i+1][j+1] == 1 and numVizinhos < 2:
+	if a[i+1][j+1] == 1 and numVizinhos < 2 and alpha[i+1][j+1] >= l and alpha[i+1][j+1] < l+m:
 		numVizinhos += 1
 		if alpha1 == []:
 			alpha1 = alpha[i+1][j+1]
 		else:
 			alpha2 = alpha[i+1][j+1]
 
-	if a[i][j+1] == 1 and numVizinhos < 2:
+	if a[i][j+1] == 1 and numVizinhos < 2 and alpha[i][j+1] >= l and alpha[i][j+1] < l+m:
 		numVizinhos += 1
 		if alpha1 == []:
 			alpha1 = alpha[i][j+1]
 		else:
 			alpha2 = alpha[i][j+1]
 
-	if a[i-1][j+1] == 1 and numVizinhos < 2:
+	if a[i-1][j+1] == 1 and numVizinhos < 2 and alpha[i-1][j+1] >= l and alpha[i-1][j+1] < l+m:
 		numVizinhos += 1
 		if alpha1 == []:
 			alpha1 = alpha[i-1][j+1]
 		else:
 			alpha2 = alpha[i-1][j+1]
 
-	if a[i-1][j] == 1 and numVizinhos < 2:
+	if a[i-1][j] == 1 and numVizinhos < 2 and alpha[i-1][j] >= l and alpha[i-1][j] < l+m:
 		numVizinhos += 1
 		if alpha1 == []:
 			alpha1 = alpha[i-1][j]
 		else:
 			alpha2 = alpha[i-1][j]
 
-	if a[i-1][j-1] == 1 and numVizinhos < 2:
+	if a[i-1][j-1] == 1 and numVizinhos < 2 and alpha[i-1][j-1] >= l and alpha[i-1][j-1] < l+m:
 		numVizinhos += 1
 		if alpha1 == []:
 			alpha1 = alpha[i-1][j-1]
@@ -178,7 +180,7 @@ def p(alpha):
 			if alpha[col] == 1:
 				age += 1
 
-		if col >= l and col < l+m:
+		if col >= l and col < (l+m):
 			if alpha[col] == 1:
 				age += 1
 
@@ -189,17 +191,23 @@ def p(alpha):
 	return age
 
 # --------------------------------------------- #
-def pk():
-	return k
+def pk(alpha, k):
+
+	if p(alpha) >= k:
+		return k
+	else:
+		k = k + 1
+		return k
 
 
 def crossover(alpha1, alpha2):
 	beta1 = alpha1
 	beta2 = alpha2
 
-	m = 3/2
+	medio = L/2
 
-	#beta1 = 
+	beta1 = alpha1[:medio] + alpha2[medio:]
+	beta2 = alpha2[:medio] + alpha1[medio:]
 
 	return beta1, beta2
 
@@ -229,7 +237,7 @@ if __name__ == "__main__":
 
 	a[3][3] = 1
 	a[4][2] = 1	
-	alpha[3][3] = [[1,1],[1,1],[1,1]]
+	alpha[3][3] = [1,1,1,1,1,1]
 	alpha[4][2] = [[1,0],[0,0],[0,0]]
 
 	print p(alpha[3][3])
