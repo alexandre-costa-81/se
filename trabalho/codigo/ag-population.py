@@ -25,9 +25,9 @@ def def_var():
 	global m # tamanho maximo do maturity (m)
 	global n # tamanho maximo do old (o)
 	global L # tamanho do "Código Genético"
-	global y
-	global m
-	global o
+	#global youth
+	#global maturity
+	#global old
 	global alpha # "Código Genético"
 	global MAX # maximo de gerações (tempo maximo)
 	global a
@@ -49,18 +49,18 @@ def def_var():
 	m = 2
 	n = 2
 	L = l+m+n
-	y = [0 for col in range(l)]
-	m = [0 for col in range(m)]
-	o = [0 for col in range(n)]
-	alpha = [[[y, m, o] for row in range(tx)] for col in range(ty)]
+	#youth = [0 for col in range(l)]
+	#maturity = [0 for col in range(m)]
+	#old = [0 for col in range(n)]
+	alpha = [[[0 for col in range(L)] for row in range(tx)] for col in range(ty)]
 	MAX = 1000
 	a = [[0 for row in range(-1,tx+1)] for col in range(-1,ty+1)]
-	k = [[0 for row in range(tx)] for col in range(ty)]
+	k = [[0 for row in range(-1,tx+1)] for col in range(-1,ty+1)]
 
 # --------------------------------------------- #
 def callback(a, aux_cont):
     aux_cont = aux_cont + 1
-    print "Tempo = %d" %(aux_cont+1)
+    print "Tempo = %d" %(aux_cont)
     destroy_bt()
     a = geracao(a, aux_cont)
     monta(a, aux_cont)
@@ -68,7 +68,7 @@ def callback(a, aux_cont):
 # --------------------------------------------- #
 def callback_2(a, aux_cont):
     aux_cont = aux_cont + 1
-    print "Tempo = %d" %(aux_cont+1)
+    print "Tempo = %d" %(aux_cont)
     destroy_bt()
     a = geracao(a, aux_cont)
     monta(a, aux_cont)
@@ -87,105 +87,121 @@ def geracao(a, aux_cont):
 	for j in range(ty):
 		for i in range(tx):
 			if a[i][j] == 0:
-				vizinho1, vizinho2, encontrou = retornaVizinhaca(i, j)
+				alpha1, alpha2, encontrou = find_two_mature_neighbors(i, j)
 				if encontrou == 2:
 					a[i][j] = 1
-					print "a[%d][%d] = %d - TEM: %d VIZINHO(S)" %(i, j, a[i][j], encontrou)
+#					beta1, beta2 = crossover(alpha1,alpha2)
+
+					#alpha[i][j] = beta if random.randint(1,2) == 1 else beta2
+
+					k[i][j] = 1
+					#print "a[%d][%d] = %d - TEM: %d VIZINHO(S)" %(i, j, a[i][j], encontrou)
 				else:
 					print "a[%d][%d] = %d - TEM: %d VIZINHO(S)" %(i, j, a[i][j], encontrou)
-	#		else:
-		#		print "Eveolui celula."
-		#	encountrou = 0
+			else:
+				print "Eveolui celula."
 
 	return a
 
 # --------------------------------------------- #
-def retornaVizinhaca(i, j):
-	vizinho1 = []
-	vizinho2 = []
+def find_two_mature_neighbors(i, j):
+	alpha1 = []
+	alpha2 = []
 	numVizinhos = 0
 
 	if a[i][j-1] == 1 and numVizinhos < 2:
 		numVizinhos += 1
-		if vizinho1 == []:
-			vizinho1 = alpha[i][j-1]
+		if alpha1 == []:
+			alpha1 = alpha[i][j-1]
 		else:
-			vizinho2 = alpha[i][j-1]
+			alpha2 = alpha[i][j-1]
 
 	if a[i+1][j-1] == 1 and numVizinhos < 2:
 		numVizinhos += 1
-		if vizinho1 == []:
-			vizinho1 = alpha[i+1][j-1]
+		if alpha1 == []:
+			alpha1 = alpha[i+1][j-1]
 		else:
-			vizinho2 = alpha[i+1][j-1]
+			alpha2 = alpha[i+1][j-1]
 
 	if a[i+1][j] == 1 and numVizinhos < 2:
 		numVizinhos += 1
-		if vizinho1 == []:
-			vizinho1 = alpha[i+1][j]
+		if alpha1 == []:
+			alpha1 = alpha[i+1][j]
 		else:
-			vizinho2 = alpha[i+1][j]
+			alpha2 = alpha[i+1][j]
 
 	if a[i+1][j+1] == 1 and numVizinhos < 2:
 		numVizinhos += 1
-		if vizinho1 == []:
-			vizinho1 = alpha[i+1][j+1]
+		if alpha1 == []:
+			alpha1 = alpha[i+1][j+1]
 		else:
-			vizinho2 = alpha[i+1][j+1]
+			alpha2 = alpha[i+1][j+1]
 
 	if a[i][j+1] == 1 and numVizinhos < 2:
 		numVizinhos += 1
-		if vizinho1 == []:
-			vizinho1 = alpha[i][j+1]
+		if alpha1 == []:
+			alpha1 = alpha[i][j+1]
 		else:
-			vizinho2 = alpha[i][j+1]
+			alpha2 = alpha[i][j+1]
 
 	if a[i-1][j+1] == 1 and numVizinhos < 2:
 		numVizinhos += 1
-		if vizinho1 == []:
-			vizinho1 = alpha[i-1][j+1]
+		if alpha1 == []:
+			alpha1 = alpha[i-1][j+1]
 		else:
-			vizinho2 = alpha[i-1][j+1]
+			alpha2 = alpha[i-1][j+1]
 
 	if a[i-1][j] == 1 and numVizinhos < 2:
 		numVizinhos += 1
-		if vizinho1 == []:
-			vizinho1 = alpha[i-1][j]
+		if alpha1 == []:
+			alpha1 = alpha[i-1][j]
 		else:
-			vizinho2 = alpha[i-1][j]
+			alpha2 = alpha[i-1][j]
 
 	if a[i-1][j-1] == 1 and numVizinhos < 2:
 		numVizinhos += 1
-		if vizinho1 == []:
-			vizinho1 = alpha[i-1][j-1]
+		if alpha1 == []:
+			alpha1 = alpha[i-1][j-1]
 		else:
-			vizinho2 = alpha[i-1][j-1]
+			alpha2 = alpha[i-1][j-1]
 
 	if numVizinhos == 2:
-		return vizinho1, vizinho2, numVizinhos
+		return alpha1, alpha2, numVizinhos
 	else:
-		return vizinho1, vizinho2, numVizinhos
+		return alpha1, alpha2, numVizinhos
 
 # --------------------------------------------- #
-def p(alpha, i, j):
+def p(alpha):
 	age = 0
-	for col in range(3):
-		if col == 0:
-			for row in range(l):
-				if alpha[i][j][col][row] == 1:
-					age += 1
+	for col in range(L):
+		if col < l:
+			if alpha[col] == 1:
+				age += 1
 
-		if col == 1:
-			for row in range(l):
-				if alpha[i][j][col][row] == 1:
-					age += 1
+		if col >= l and col < l+m:
+			if alpha[col] == 1:
+				age += 1
 
-		if col == 2:
-			for row in range(l):
-				if alpha[i][j][col][row] == 1:
-					age += 1
+		if col >= l+m:
+			if alpha[col] == 1:
+				age += 1
 
 	return age
+
+# --------------------------------------------- #
+def pk():
+	return k
+
+
+def crossover(alpha1, alpha2):
+	beta1 = alpha1
+	beta2 = alpha2
+
+	m = 3/2
+
+	#beta1 = 
+
+	return beta1, beta2
 
 # --------------------------------------------- #
 def monta(a, aux_cont):
@@ -216,7 +232,7 @@ if __name__ == "__main__":
 	alpha[3][3] = [[1,1],[1,1],[1,1]]
 	alpha[4][2] = [[1,0],[0,0],[0,0]]
 
-	print p(alpha, 3, 3)
+	print p(alpha[3][3])
 
 	## Variaveis para desenho no ecran
 	XY = 10
