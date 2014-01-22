@@ -45,9 +45,9 @@ def def_var():
     ## Variaveis de configuração do automato celular
     tx = 50
     ty = 50
-    l = 2
-    m = 2
-    n = 2
+    l = 32
+    m = 32
+    n = 32
     L = l+m+n
     #youth = [0 for col in range(l)]
     #maturity = [0 for col in range(m)]
@@ -175,7 +175,7 @@ def find_two_mature_neighbors(i, j):
         numVizinhos += 1
         if alpha1 == []:
             alpha1 = alpha[i-1][j+1]
-        else:
+        else:   
             alpha2 = alpha[i-1][j+1]
 
     if a[i-1][j] == 1 and numVizinhos < 2 and k[i-1][j] > l and k[i-1][j] <= l+m:
@@ -201,17 +201,8 @@ def find_two_mature_neighbors(i, j):
 def p(alpha):
     age = 0
     for col in range(L):
-        if col < l:
-            if alpha[col] == 1:
-                age += 1
-
-        if col > l and col < (l+m):
-            if alpha[col] == 1:
-                age += 1
-
-        if col >= l+m:
-            if alpha[col] == 1:
-                age += 1
+        if alpha[col] == 1:
+            age += 1
 
     return age
 
@@ -236,9 +227,23 @@ def crossover(alpha1, alpha2):
 
 
 # --------------------------------------------- #
-def gera_populacao(a, alpha):
+def gera_populacao(a, alpha, p0):
+    for x in range(int(tx*ty*p0)):
+        i1 = random.randint(0,tx-1)
+        j1 = random.randint(0,ty-1)
         
-        return 1
+        a[i1][j1] = 1
+        k[i1][j1] = 1
+        
+        for y in range(L):
+            alpha[i1][j1][y] = random.randint(0,1)
+        #for y in range(3):
+         #   if y == 0:
+          #      for y1 in range(l)
+           #         alpha[i1][j1][y1]
+        
+        
+    return 
 
 
 
@@ -246,13 +251,16 @@ def gera_populacao(a, alpha):
 if __name__ == "__main__":
     aux_cont = 0
     def_var()
+    p0 = 0.02
 
-    a[3][3] = 1
-    a[4][2] = 1 
-    alpha[3][3] = [1,1,1,0,0,0]
-    alpha[4][2] = [0,0,0,1,1,1]
-    k[3][3] = 1
-    k[4][2] = 1
+    gera_populacao(a, alpha, p0)
+
+#    a[3][3] = 1
+#    a[4][2] = 1 
+#    alpha[3][3] = [1,1,1,0,0,0]
+#    alpha[4][2] = [0,0,0,1,1,1]
+#    k[3][3] = 1
+#    k[4][2] = 1
 
     ## Variaveis para desenho no ecran
     XY = 10
