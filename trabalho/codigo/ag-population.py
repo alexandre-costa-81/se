@@ -49,10 +49,11 @@ def def_var():
     m = 32
     n = 32
     L = l+m+n
-    #youth = [0 for col in range(l)]
-    #maturity = [0 for col in range(m)]
-    #old = [0 for col in range(n)]
-    alpha = [[[0 for col in range(L)] for row in range(tx)] for col in range(ty)]
+    youth = [0 for col in range(l)]
+    maturity = [0 for col in range(m)]
+    old = [0 for col in range(n)]
+#    alpha = [[[0 for col in range(L)] for row in range(tx)] for col in range(ty)]
+    alpha = [[[youth, maturity, old] for row in range(-1,tx+1)] for col in range(-1,ty+1)]
     MAX = 1000
     a = [[0 for row in range(-1,tx+1)] for col in range(-1,ty+1)]
     k = [[0 for row in range(-1,tx+1)] for col in range(-1,ty+1)]
@@ -87,9 +88,10 @@ def monta(a, aux_cont):
             if a[i][j] == 0:
                 canvas.itemconfig(cell[i][j], fill="white")
             else:
-                if k[i][j] <= l:
+                ageYouth, ageMaturity, ageOld = p(alpha[i][j])
+                if k[i][j] <= ageYouth:
                         canvas.itemconfig(cell[i][j], fill="yellow")
-                elif k[i][j] > l and k[i][j] <= (l+m):
+                elif k[i][j] > ageYouth and k[i][j] <= (ageYouth + ageMaturity):
                         canvas.itemconfig(cell[i][j], fill="red")
                 else:
                         canvas.itemconfig(cell[i][j], fill="blue")
@@ -121,7 +123,11 @@ def geracao(a, aux_cont):
                     k[i][j] = 1
                     #print "a[%d][%d] = %d - TEM: %d VIZINHO(S)" %(i, j, a[i][j], encontrou)
             else:
-                if pk(alpha[i][j],k[i][j]) == p(alpha[i][j]):
+                ageYouth, ageMaturity, ageOld = p(alpha[i][j])
+                age = ageYouth + ageMaturity + ageOld
+                if pk(alpha[i][j],k[i][j]) == age:
+                #if k[i][j] > p(alpha[i][j]):
+                #if k[i][j] > age:
                     k[i][j] = 0
                     a[i][j] = 0
                 else:
@@ -136,56 +142,67 @@ def find_two_mature_neighbors(i, j):
     alpha2 = []
     numVizinhos = 0
 
-    if a[i][j-1] == 1 and numVizinhos < 2 and k[i][j-1] > l and k[i][j-1] <= l+m:
+    ageYouth, ageMaturity, ageOld = p(alpha[i][j-1])
+    if a[i][j-1] == 1 and numVizinhos < 2 and k[i][j-1] > ageYouth and k[i][j-1] <= (ageYouth + ageMaturity):
         numVizinhos += 1
         if alpha1 == []:
             alpha1 = alpha[i][j-1]
         else:
             alpha2 = alpha[i][j-1]
 
-    if a[i+1][j-1] == 1 and numVizinhos < 2 and k[i+1][j-1] >= l and k[i+1][j-1] <= l+m:
+    ageYouth, ageMaturity, ageOld = p(alpha[i+1][j-1])
+    if a[i+1][j-1] == 1 and numVizinhos < 2 and k[i+1][j-1] > ageYouth and k[i+1][j-1] <= (ageYouth + ageMaturity):
         numVizinhos += 1
         if alpha1 == []:
             alpha1 = alpha[i+1][j-1]
         else:
             alpha2 = alpha[i+1][j-1]
 
-    if a[i+1][j] == 1 and numVizinhos < 2 and k[i+1][j] > l and k[i+1][j] <= l+m:
+
+    ageYouth, ageMaturity, ageOld = p(alpha[i+1][j])
+    if a[i+1][j] == 1 and numVizinhos < 2 and k[i+1][j] > ageYouth and k[i+1][j] <= (ageYouth + ageMaturity):
         numVizinhos += 1
         if alpha1 == []:
             alpha1 = alpha[i+1][j]
         else:
             alpha2 = alpha[i+1][j]
 
-    if a[i+1][j+1] == 1 and numVizinhos < 2 and k[i+1][j+1] > l and k[i+1][j+1] <= l+m:
+    ageYouth, ageMaturity, ageOld = p(alpha[i+1][j+1])
+    if a[i+1][j+1] == 1 and numVizinhos < 2 and k[i+1][j+1] > ageYouth and k[i+1][j+1] <= (ageYouth + ageMaturity):
         numVizinhos += 1
         if alpha1 == []:
             alpha1 = alpha[i+1][j+1]
         else:
             alpha2 = alpha[i+1][j+1]
 
-    if a[i][j+1] == 1 and numVizinhos < 2 and k[i][j+1] > l and k[i][j+1] <= l+m:
+    ageYouth, ageMaturity, ageOld = p(alpha[i][j+1])
+    if a[i][j+1] == 1 and numVizinhos < 2 and k[i][j+1] > ageYouth and k[i][j+1] <= (ageYouth + ageMaturity):
         numVizinhos += 1
         if alpha1 == []:
             alpha1 = alpha[i][j+1]
         else:
             alpha2 = alpha[i][j+1]
 
-    if a[i-1][j+1] == 1 and numVizinhos < 2 and k[i-1][j+1] > l and k[i-1][j+1] <= l+m:
+    ageYouth, ageMaturity, ageOld = p(alpha[i-1][j+1])
+    if a[i-1][j+1] == 1 and numVizinhos < 2 and k[i-1][j+1] > ageYouth and k[i-1][j+1] <= (ageYouth + ageMaturity):
         numVizinhos += 1
         if alpha1 == []:
             alpha1 = alpha[i-1][j+1]
         else:   
             alpha2 = alpha[i-1][j+1]
 
-    if a[i-1][j] == 1 and numVizinhos < 2 and k[i-1][j] > l and k[i-1][j] <= l+m:
+
+    ageYouth, ageMaturity, ageOld = p(alpha[i-1][j])
+    if a[i-1][j] == 1 and numVizinhos < 2 and k[i-1][j] > ageYouth and k[i-1][j] <= (ageYouth + ageMaturity):
         numVizinhos += 1
         if alpha1 == []:
             alpha1 = alpha[i-1][j]
         else:
             alpha2 = alpha[i-1][j]
 
-    if a[i-1][j-1] == 1 and numVizinhos < 2 and k[i-1][j-1] > l and k[i-1][j-1] <= l+m:
+
+    ageYouth, ageMaturity, ageOld = p(alpha[i-1][j-1])
+    if a[i-1][j-1] == 1 and numVizinhos < 2 and k[i-1][j-1] > ageYouth and k[i-1][j-1] <= (ageYouth + ageMaturity):
         numVizinhos += 1
         if alpha1 == []:
             alpha1 = alpha[i-1][j-1]
@@ -198,49 +215,95 @@ def find_two_mature_neighbors(i, j):
         return alpha1, alpha2, numVizinhos
 
 # --------------------------------------------- #
-def p(alpha):
+def p(_alpha):
     age = 0
-    for col in range(L):
-        if alpha[col] == 1:
-            age += 1
+    youth1 = 0
+    maturity1 = 0
+    old1 = 0
+
+    for x1 in range(3):
+        if x1 == 0:
+            for y1 in range(l):
+                if _alpha[x1][y1] == 1:
+                    youth1 += 1
+        if x1 == 1:
+            for y1 in range(m):
+                if _alpha[x1][y1] == 1:
+                    maturity1 += 1
+        if x1 == 2:
+            for y1 in range(n):
+                if _alpha[x1][y1] == 1:
+                    old1 += 1
+
+    age = youth1, maturity1, old1
+            
+#    for col in range(L):
+#        if alpha[col] == 1:
+#            age += 1
 
     return age
 
 # --------------------------------------------- #
 def pk(alpha, k):
-    if p(alpha) >= k:
+
+    ageYouth, ageMaturity, ageOld = p(alpha)
+
+    if (ageYouth + ageMaturity + ageOld) >= k:
         return k
     else:
-        return p(alpha)
+        return (ageYouth + ageMaturity + ageOld)
 
 
 def crossover(alpha1, alpha2):
     beta1 = alpha1
     beta2 = alpha2
 
-    medio = L/2
+    for tripla in range(3):
+        if tripla == 0:
+            medio = l/2
+        elif tripla == 1:
+            medio = m/2
+        elif tripla == 2:
+            medio = n/2
 
-    beta1 = alpha1[:medio] + alpha2[medio:]
-    beta2 = alpha2[:medio] + alpha1[medio:]
+        beta1[tripla] = alpha1[tripla][:medio] + alpha2[tripla][medio:]
+        beta2[tripla] = alpha2[tripla][:medio] + alpha1[tripla][medio:]
+        
+
+#    medio = L/2
+
+#    beta1 = alpha1[:medio] + alpha2[medio:]
+#    beta2 = alpha2[:medio] + alpha1[medio:]
 
     return beta1, beta2
 
 
 # --------------------------------------------- #
-def gera_populacao(a, alpha, p0):
+def gera_populacao(p0):
     for x in range(int(tx*ty*p0)):
         i1 = random.randint(0,tx-1)
         j1 = random.randint(0,ty-1)
         
         a[i1][j1] = 1
         k[i1][j1] = 1
+
+        print i1, j1
         
-        for y in range(L):
-            alpha[i1][j1][y] = random.randint(0,1)
-        #for y in range(3):
-         #   if y == 0:
-          #      for y1 in range(l)
-           #         alpha[i1][j1][y1]
+#        for y in range(L):
+#            alpha[i1][j1][y] = random.randint(0,1)
+        for tripla in range(3):
+            if tripla == 0:
+                for y1 in range(l):
+                    y2 = 1 if random.random() > 0.5 else 0
+                    alpha[i1][j1][tripla][y1] = y2
+            if tripla == 1:
+                for m1 in range(m):
+                    m2 = 1 if random.random() > 0.5 else 0
+                    alpha[i1][j1][tripla][m1] = m2
+            if tripla == 2:
+                for o1 in range(n):
+                    o2 = 1 if random.random() > 0.5 else 0
+                    alpha[i1][j1][tripla][o1] = o2
         
         
     return 
@@ -253,8 +316,15 @@ if __name__ == "__main__":
     def_var()
     p0 = 0.02
 
-    gera_populacao(a, alpha, p0)
+    #print alpha[0][0]
+    #print a[0][0]
+    gera_populacao(p0)
 
+
+    #print p(alpha[0][0])
+    print alpha[0][0]
+    print alpha[10][5]
+    #print a[0][0]
 #    a[3][3] = 1
 #    a[4][2] = 1 
 #    alpha[3][3] = [1,1,1,0,0,0]
