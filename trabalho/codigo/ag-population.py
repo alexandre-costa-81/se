@@ -11,6 +11,7 @@ Created: 15/01/2014
 from Tkinter import *
 import random
 import time
+from datetime import datetime
 
 # GLOBAL
 
@@ -43,16 +44,10 @@ def def_var():
 
     # INICIALIZA VARIAVEIS
     ## Variaveis de configuração do automato celular
-    tx = 50
-    ty = 50
-    l = 32
-    m = 32
-    n = 32
     L = l+m+n
     youth = [0 for col in range(l)]
     maturity = [0 for col in range(m)]
     old = [0 for col in range(n)]
-#    alpha = [[[0 for col in range(L)] for row in range(tx)] for col in range(ty)]
     alpha = [[[youth, maturity, old] for row in range(-1,tx+1)] for col in range(-1,ty+1)]
     MAX = 1000
     a = [[0 for row in range(-1,tx+1)] for col in range(-1,ty+1)]
@@ -118,16 +113,13 @@ def geracao(a, aux_cont):
                     a[i][j] = 1
                     beta1, beta2 = crossover(alpha1,alpha2)
 
-                    alpha[i][j] = beta1 if random.randint(1,2) == 1 else beta2
-                    #print alpha[i][j]
+                    alpha[i][j] = beta1 if random.random() > 0.5 else beta2
+
                     k[i][j] = 1
-                    #print "a[%d][%d] = %d - TEM: %d VIZINHO(S)" %(i, j, a[i][j], encontrou)
             else:
                 ageYouth, ageMaturity, ageOld = p(alpha[i][j])
                 age = ageYouth + ageMaturity + ageOld
                 if pk(alpha[i][j],k[i][j]) == age:
-                #if k[i][j] > p(alpha[i][j]):
-                #if k[i][j] > age:
                     k[i][j] = 0
                     a[i][j] = 0
                 else:
@@ -258,22 +250,12 @@ def crossover(alpha1, alpha2):
     beta1 = alpha1
     beta2 = alpha2
 
-    for tripla in range(3):
-        if tripla == 0:
-            medio = l/2
-        elif tripla == 1:
-            medio = m/2
-        elif tripla == 2:
-            medio = n/2
-
-        beta1[tripla] = alpha1[tripla][:medio] + alpha2[tripla][medio:]
-        beta2[tripla] = alpha2[tripla][:medio] + alpha1[tripla][medio:]
-        
-
-#    medio = L/2
-
-#    beta1 = alpha1[:medio] + alpha2[medio:]
-#    beta2 = alpha2[:medio] + alpha1[medio:]
+    beta1[0] = alpha1[0][:(l/2)] + alpha2[0][(l/2):]
+    beta2[0] = alpha2[0][:(l/2)] + alpha1[0][(l/2):]
+    beta1[1] = alpha1[1][:(m/2)] + alpha2[1][(m/2):]
+    beta2[1] = alpha2[1][:(m/2)] + alpha1[1][(m/2):]
+    beta1[2] = alpha1[2][:(n/2)] + alpha2[2][(n/2):]
+    beta2[2] = alpha2[2][:(n/2)] + alpha1[2][(n/2):]
 
     return beta1, beta2
 
@@ -283,30 +265,19 @@ def gera_populacao(p0):
     for x in range(int(tx*ty*p0)):
         i1 = random.randint(0,tx-1)
         j1 = random.randint(0,ty-1)
-        
+
+        randBinList = lambda n: [random.randint(0,1) for b in range(1,n+1)]
+
         a[i1][j1] = 1
         k[i1][j1] = 1
 
-        print i1, j1
-        
-#        for y in range(L):
-#            alpha[i1][j1][y] = random.randint(0,1)
-        for tripla in range(3):
-            if tripla == 0:
-                for y1 in range(l):
-                    y2 = 1 if random.random() > 0.5 else 0
-                    alpha[i1][j1][tripla][y1] = y2
-            if tripla == 1:
-                for m1 in range(m):
-                    m2 = 1 if random.random() > 0.5 else 0
-                    alpha[i1][j1][tripla][m1] = m2
-            if tripla == 2:
-                for o1 in range(n):
-                    o2 = 1 if random.random() > 0.5 else 0
-                    alpha[i1][j1][tripla][o1] = o2
-        
-        
-    return 
+        alpha[i1][j1][0] = randBinList(l)
+
+        alpha[i1][j1][1] = randBinList(m)
+
+        alpha[i1][j1][2] = randBinList(n)
+
+    return
 
 
 
@@ -314,23 +285,18 @@ def gera_populacao(p0):
 if __name__ == "__main__":
     aux_cont = 0
     def_var()
-    p0 = 0.02
 
-    #print alpha[0][0]
-    #print a[0][0]
+
+### CONFIGURAÇÃO DO SISTEMA ###
+    p0 = 0.05 # Initial density (P0)
+    tx = 50   # Lattice size X
+    ty = 50   # Lattice size Y
+    l = 32    # Youth   - length
+    m = 32    # Mature  - length
+    n = 32    # Old age - length
+
+### ----------------------- ###
     gera_populacao(p0)
-
-
-    #print p(alpha[0][0])
-    print alpha[0][0]
-    print alpha[10][5]
-    #print a[0][0]
-#    a[3][3] = 1
-#    a[4][2] = 1 
-#    alpha[3][3] = [1,1,1,0,0,0]
-#    alpha[4][2] = [0,0,0,1,1,1]
-#    k[3][3] = 1
-#    k[4][2] = 1
 
     ## Variaveis para desenho no ecran
     XY = 10
