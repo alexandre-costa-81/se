@@ -23,12 +23,9 @@ def def_var():
     ## Variaveis de configuração do automato celular
     global N # Lattice size (N×N)
     global l # tamanho maximo do youth (y)
-    global m # tamanho maximo do maturity (m)
+    global m # tamanho maximo do maturiN (m)
     global n # tamanho maximo do old (o)
     global L # tamanho do "Código Genético"
-    #global youth
-    #global maturity
-    #global old
     global alpha # "Código Genético"
     global MAX # maximo de gerações (tempo maximo)
     global a
@@ -39,19 +36,8 @@ def def_var():
     global root
     global canvas
     global cell
-    global tx
-    global ty
-
-    # INICIALIZA VARIAVEIS
-    ## Variaveis de configuração do automato celular
-    L = l+m+n
-    youth = [0 for col in range(l)]
-    maturity = [0 for col in range(m)]
-    old = [0 for col in range(n)]
-    alpha = [[[youth, maturity, old] for row in range(-1,tx+1)] for col in range(-1,ty+1)]
-    MAX = 1000
-    a = [[0 for row in range(-1,tx+1)] for col in range(-1,ty+1)]
-    k = [[0 for row in range(-1,tx+1)] for col in range(-1,ty+1)]
+    global N
+    global N
 
 # --------------------------------------------- #
 def callback(a, aux_cont):
@@ -78,15 +64,15 @@ def destroy_bt():
 
 # --------------------------------------------- #
 def monta(a, aux_cont):
-    for j in range(ty):
-        for i in range(tx):
+    for j in range(N):
+        for i in range(N):
             if a[i][j] == 0:
                 canvas.itemconfig(cell[i][j], fill="white")
             else:
-                ageYouth, ageMaturity, ageOld = p(alpha[i][j])
+                ageYouth, ageMaturiN, ageOld = p(alpha[i][j])
                 if k[i][j] <= ageYouth:
                         canvas.itemconfig(cell[i][j], fill="yellow")
-                elif k[i][j] > ageYouth and k[i][j] <= (ageYouth + ageMaturity):
+                elif k[i][j] > ageYouth and k[i][j] <= (ageYouth + ageMaturiN):
                         canvas.itemconfig(cell[i][j], fill="red")
                 else:
                         canvas.itemconfig(cell[i][j], fill="blue")
@@ -105,8 +91,8 @@ def monta(a, aux_cont):
 # --------------------------------------------- #
 def geracao(a, aux_cont):
     encontrou = 0
-    for j in range(ty):
-        for i in range(tx):
+    for j in range(N):
+        for i in range(N):
             if a[i][j] == 0:
                 alpha1, alpha2, encontrou = find_two_mature_neighbors(i, j)
                 if encontrou == 2:
@@ -117,8 +103,8 @@ def geracao(a, aux_cont):
 
                     k[i][j] = 1
             else:
-                ageYouth, ageMaturity, ageOld = p(alpha[i][j])
-                age = ageYouth + ageMaturity + ageOld
+                ageYouth, ageMaturiN, ageOld = p(alpha[i][j])
+                age = ageYouth + ageMaturiN + ageOld
                 if pk(alpha[i][j],k[i][j]) == age:
                     k[i][j] = 0
                     a[i][j] = 0
@@ -134,16 +120,16 @@ def find_two_mature_neighbors(i, j):
     alpha2 = []
     numVizinhos = 0
 
-    ageYouth, ageMaturity, ageOld = p(alpha[i][j-1])
-    if a[i][j-1] == 1 and numVizinhos < 2 and k[i][j-1] > ageYouth and k[i][j-1] <= (ageYouth + ageMaturity):
+    ageYouth, ageMaturiN, ageOld = p(alpha[i][j-1])
+    if a[i][j-1] == 1 and numVizinhos < 2 and k[i][j-1] > ageYouth and k[i][j-1] <= (ageYouth + ageMaturiN):
         numVizinhos += 1
         if alpha1 == []:
             alpha1 = alpha[i][j-1]
         else:
             alpha2 = alpha[i][j-1]
 
-    ageYouth, ageMaturity, ageOld = p(alpha[i+1][j-1])
-    if a[i+1][j-1] == 1 and numVizinhos < 2 and k[i+1][j-1] > ageYouth and k[i+1][j-1] <= (ageYouth + ageMaturity):
+    ageYouth, ageMaturiN, ageOld = p(alpha[i+1][j-1])
+    if a[i+1][j-1] == 1 and numVizinhos < 2 and k[i+1][j-1] > ageYouth and k[i+1][j-1] <= (ageYouth + ageMaturiN):
         numVizinhos += 1
         if alpha1 == []:
             alpha1 = alpha[i+1][j-1]
@@ -151,32 +137,32 @@ def find_two_mature_neighbors(i, j):
             alpha2 = alpha[i+1][j-1]
 
 
-    ageYouth, ageMaturity, ageOld = p(alpha[i+1][j])
-    if a[i+1][j] == 1 and numVizinhos < 2 and k[i+1][j] > ageYouth and k[i+1][j] <= (ageYouth + ageMaturity):
+    ageYouth, ageMaturiN, ageOld = p(alpha[i+1][j])
+    if a[i+1][j] == 1 and numVizinhos < 2 and k[i+1][j] > ageYouth and k[i+1][j] <= (ageYouth + ageMaturiN):
         numVizinhos += 1
         if alpha1 == []:
             alpha1 = alpha[i+1][j]
         else:
             alpha2 = alpha[i+1][j]
 
-    ageYouth, ageMaturity, ageOld = p(alpha[i+1][j+1])
-    if a[i+1][j+1] == 1 and numVizinhos < 2 and k[i+1][j+1] > ageYouth and k[i+1][j+1] <= (ageYouth + ageMaturity):
+    ageYouth, ageMaturiN, ageOld = p(alpha[i+1][j+1])
+    if a[i+1][j+1] == 1 and numVizinhos < 2 and k[i+1][j+1] > ageYouth and k[i+1][j+1] <= (ageYouth + ageMaturiN):
         numVizinhos += 1
         if alpha1 == []:
             alpha1 = alpha[i+1][j+1]
         else:
             alpha2 = alpha[i+1][j+1]
 
-    ageYouth, ageMaturity, ageOld = p(alpha[i][j+1])
-    if a[i][j+1] == 1 and numVizinhos < 2 and k[i][j+1] > ageYouth and k[i][j+1] <= (ageYouth + ageMaturity):
+    ageYouth, ageMaturiN, ageOld = p(alpha[i][j+1])
+    if a[i][j+1] == 1 and numVizinhos < 2 and k[i][j+1] > ageYouth and k[i][j+1] <= (ageYouth + ageMaturiN):
         numVizinhos += 1
         if alpha1 == []:
             alpha1 = alpha[i][j+1]
         else:
             alpha2 = alpha[i][j+1]
 
-    ageYouth, ageMaturity, ageOld = p(alpha[i-1][j+1])
-    if a[i-1][j+1] == 1 and numVizinhos < 2 and k[i-1][j+1] > ageYouth and k[i-1][j+1] <= (ageYouth + ageMaturity):
+    ageYouth, ageMaturiN, ageOld = p(alpha[i-1][j+1])
+    if a[i-1][j+1] == 1 and numVizinhos < 2 and k[i-1][j+1] > ageYouth and k[i-1][j+1] <= (ageYouth + ageMaturiN):
         numVizinhos += 1
         if alpha1 == []:
             alpha1 = alpha[i-1][j+1]
@@ -184,8 +170,8 @@ def find_two_mature_neighbors(i, j):
             alpha2 = alpha[i-1][j+1]
 
 
-    ageYouth, ageMaturity, ageOld = p(alpha[i-1][j])
-    if a[i-1][j] == 1 and numVizinhos < 2 and k[i-1][j] > ageYouth and k[i-1][j] <= (ageYouth + ageMaturity):
+    ageYouth, ageMaturiN, ageOld = p(alpha[i-1][j])
+    if a[i-1][j] == 1 and numVizinhos < 2 and k[i-1][j] > ageYouth and k[i-1][j] <= (ageYouth + ageMaturiN):
         numVizinhos += 1
         if alpha1 == []:
             alpha1 = alpha[i-1][j]
@@ -193,8 +179,8 @@ def find_two_mature_neighbors(i, j):
             alpha2 = alpha[i-1][j]
 
 
-    ageYouth, ageMaturity, ageOld = p(alpha[i-1][j-1])
-    if a[i-1][j-1] == 1 and numVizinhos < 2 and k[i-1][j-1] > ageYouth and k[i-1][j-1] <= (ageYouth + ageMaturity):
+    ageYouth, ageMaturiN, ageOld = p(alpha[i-1][j-1])
+    if a[i-1][j-1] == 1 and numVizinhos < 2 and k[i-1][j-1] > ageYouth and k[i-1][j-1] <= (ageYouth + ageMaturiN):
         numVizinhos += 1
         if alpha1 == []:
             alpha1 = alpha[i-1][j-1]
@@ -210,7 +196,7 @@ def find_two_mature_neighbors(i, j):
 def p(_alpha):
     age = 0
     youth1 = 0
-    maturity1 = 0
+    maturiN1 = 0
     old1 = 0
 
     for x1 in range(3):
@@ -221,13 +207,13 @@ def p(_alpha):
         if x1 == 1:
             for y1 in range(m):
                 if _alpha[x1][y1] == 1:
-                    maturity1 += 1
+                    maturiN1 += 1
         if x1 == 2:
             for y1 in range(n):
                 if _alpha[x1][y1] == 1:
                     old1 += 1
 
-    age = youth1, maturity1, old1
+    age = youth1, maturiN1, old1
             
 #    for col in range(L):
 #        if alpha[col] == 1:
@@ -238,12 +224,12 @@ def p(_alpha):
 # --------------------------------------------- #
 def pk(alpha, k):
 
-    ageYouth, ageMaturity, ageOld = p(alpha)
+    ageYouth, ageMaturiN, ageOld = p(alpha)
 
-    if (ageYouth + ageMaturity + ageOld) >= k:
+    if (ageYouth + ageMaturiN + ageOld) >= k:
         return k
     else:
-        return (ageYouth + ageMaturity + ageOld)
+        return (ageYouth + ageMaturiN + ageOld)
 
 
 def crossover(alpha1, alpha2):
@@ -262,9 +248,9 @@ def crossover(alpha1, alpha2):
 
 # --------------------------------------------- #
 def gera_populacao(p0):
-    for x in range(int(tx*ty*p0)):
-        i1 = random.randint(0,tx-1)
-        j1 = random.randint(0,ty-1)
+    for x in range(int(N*N*p0)):
+        i1 = random.randint(0,N-1)
+        j1 = random.randint(0,N-1)
 
         randBinList = lambda n: [random.randint(0,1) for b in range(1,n+1)]
 
@@ -288,14 +274,23 @@ if __name__ == "__main__":
 
 
 ### CONFIGURAÇÃO DO SISTEMA ###
-    p0 = 0.05 # Initial density (P0)
-    tx = 50   # Lattice size X
-    ty = 50   # Lattice size Y
-    l = 32    # Youth   - length
-    m = 32    # Mature  - length
-    n = 32    # Old age - length
-
+    p0 = 0.90   # Initial densiN (P0)
+    N = 50      # Lattice size (N×N)
+    l = 32      # Youth   - length
+    m = 32      # Mature  - length
+    n = 32      # Old age - length
 ### ----------------------- ###
+
+    # INICIALIZA VARIAVEIS
+    ## Variaveis de configuração do automato celular
+    L = l+m+n
+    youth = [0 for col in range(l)]
+    maturiN = [0 for col in range(m)]
+    old = [0 for col in range(n)]
+    alpha = [[[youth, maturiN, old] for row in range(-1,N+1)] for col in range(-1,N+1)]
+    a = [[0 for row in range(-1,N+1)] for col in range(-1,N+1)]
+    k = [[0 for row in range(-1,N+1)] for col in range(-1,N+1)]
+
     gera_populacao(p0)
 
     ## Variaveis para desenho no ecran
@@ -303,11 +298,11 @@ if __name__ == "__main__":
     root = Tk()
     root.title("Simulador do Ambiênte")
 
-    canvas  = Canvas(root, width=ty*10, height=tx*10, highlightthickness=0, bd=0, bg='white')
-    cell = [[0 for row in range(-1,tx+1)] for col in range(-1,ty+1)]
+    canvas  = Canvas(root, width=N*10, height=N*10, highlightthickness=0, bd=0, bg='white')
+    cell = [[0 for row in range(-1,N+1)] for col in range(-1,N+1)]
 
-    for j in range(ty):
-        for i in range(tx):
+    for j in range(N):
+        for i in range(N):
             cell[i][j] = canvas.create_oval((i*XY, j*XY, i*XY+XY, j*XY+XY),outline="gray",fill="white")
 
     monta(a, aux_cont)
