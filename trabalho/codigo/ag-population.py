@@ -43,6 +43,7 @@ def def_var():
     global cell
     global N
     global N
+    global stop
 
 # --------------------------------------------- #
 def callback(a, aux_cont):
@@ -61,7 +62,9 @@ def callback_2(a, aux_cont):
     print "População Atual = %d" %(populacao)
     print "-----------------------------"
     monta(a, aux_cont)
-    root.after(100,lambda: callback_2(a, aux_cont))
+    destroy_bt()
+    if aux_cont < MAX:
+        root.after(50,lambda: callback_2(a, aux_cont))
 
 # --------------------------------------------- #
 def destroy_bt():
@@ -315,74 +318,136 @@ def move_seeds(i, j):
         if a[i][j-1] == 1:
             a[i][j-1] = 0
             k[i][j-1] = 0
-        else:
+            a[i][j] = 0
+            k[i][j] = 0
+        elif a[i][j-1] == 0:
             a[i][j-1] = -1
             k[i][j-1] = 0
+            a[i][j] = 0
+            k[i][j] = 0
+        else:
+			a[i][j] = -1
+			k[i][j] = 0
 
 
     elif selecionado == 1:
         if a[i+1][j-1] == 1:
             a[i+1][j-1] = 0
             k[i+1][j-1] = 0
-        else:
+            a[i][j] = 0
+            k[i][j] = 0
+        elif a[i+1][j-1] == 0:
             a[i+1][j-1] = -1
             k[i+1][j-1] = 0
+            a[i][j] = 0
+            k[i][j] = 0
+
+        else:
+			a[i][j] = -1
+			k[i][j] = 0
+
 
     elif selecionado == 2:
         if a[i+1][j] == 1:
             a[i+1][j] = 0
             k[i+1][j] = 0
-        else:
+            a[i][j] = 0
+            k[i][j] = 0
+        elif a[i+1][j] == 0:
             a[i+1][j] = -1
             k[i+1][j] = 0
+            a[i][j] = 0
+            k[i][j] = 0
+
+        else:
+			a[i][j] = -1
+			k[i][j] = 0
 
 
     elif selecionado == 3:
         if a[i+1][j+1] == 1:
             a[i+1][j+1] = 0
             k[i+1][j+1] = 0
-        else:
+            a[i][j] = 0
+            k[i][j] = 0
+        elif a[i+1][j+1] == 0:
             a[i+1][j+1] = -1
             k[i+1][j+1] = 0
+            a[i][j] = 0
+            k[i][j] = 0
+
+        else:
+			a[i][j] = -1
+			k[i][j] = 0
+
 
     elif selecionado == 4:
         if a[i][j+1] == 1:
             a[i][j+1] = 0
             k[i][j+1] = 0
-        else:
+            a[i][j] = 0
+            k[i][j] = 0
+        elif a[i][j+1] == 0:
             a[i][j+1] = -1
             k[i][j+1] = 0
+            a[i][j] = 0
+            k[i][j] = 0
+
+        else:
+			a[i][j] = -1
+			k[i][j] = 0
 
 
     elif selecionado == 5:
         if a[i-1][j+1] == 1:
             a[i-1][j+1] = 0
             k[i-1][j+1] = 0
-        else:
+            a[i][j] = 0
+            k[i][j] = 0
+        elif a[i-1][j+1] == 0:
             a[i-1][j+1] = -1
             k[i-1][j+1] = 0
+            a[i][j] = 0
+            k[i][j] = 0
+
+        else:
+			a[i][j] = -1
+			k[i][j] = 0
 
 
     elif selecionado == 6:
         if a[i-1][j] == 1:
             a[i-1][j] = 0
             k[i-1][j] = 0
-        else:
+            a[i][j] = 0
+            k[i][j] = 0
+        elif a[i-1][j] == 0:
             a[i-1][j] = -1
             k[i-1][j] = 0
+            a[i][j] = 0
+            k[i][j] = 0
+
+        else:
+			a[i][j] = -1
+			k[i][j] = 0
 
 
     elif selecionado == 7:
         if a[i-1][j-1] == 1:
             a[i-1][j-1] = 0
             k[i-1][j-1] = 0
-        else:
+            a[i][j] = 0
+            k[i][j] = 0
+        elif a[i-1][j-1] == 0:
             a[i-1][j-1] = -1
             k[i-1][j-1] = 0
+            a[i][j] = 0
+            k[i][j] = 0
 
+        else:
+			a[i][j] = -1
+			k[i][j] = 0
 
-    a[i][j] = 0
-    k[i][j] = 0
 
 
     return
@@ -392,10 +457,12 @@ def move_seeds(i, j):
 if __name__ == "__main__":
     aux_cont = 0
     populacao = 0
+    stop = 0
     def_var()
 
 
 ### CONFIGURAÇÃO DO SISTEMA ###
+    MAX = 2000
     p0 = 0.02           # Initial densiN (P0)
     N = 50              # Lattice size (N×N)
     l = 32              # Youth   - length
