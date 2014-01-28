@@ -20,7 +20,7 @@ from datetime import datetime
 # --------------------------------------------- #
 def def_var():
     # DECLARA VARIAVEIS
-    ## Variaveis de configuração do automato celular
+    ## Variaveis do automato celular
     global N # Lattice size (N×N)
     global l # tamanho maximo do youth (y)
     global m # tamanho maximo do maturiN (m)
@@ -30,6 +30,11 @@ def def_var():
     global MAX # maximo de gerações (tempo maximo)
     global a
     global k
+    global populacao # Numero total de invíduos a cada iteração
+
+    ## Variaveis da praga
+    global dose
+    global plaguePeriod
 
     ## Variaveis para desenho no ecran
     global XY # x0, y0, x1, y1
@@ -41,20 +46,22 @@ def def_var():
 
 # --------------------------------------------- #
 def callback(a, aux_cont):
-        aux_cont = aux_cont + 1
-        print "Tempo = %d" %(aux_cont)
-        destroy_bt()
-        a = geracao(a, aux_cont)
-        monta(a, aux_cont)
+    aux_cont = aux_cont + 1
+    print "Tempo = %d" %(aux_cont)
+    a, populacao = geracao(a, aux_cont)
+    destroy_bt()
+    monta(a, aux_cont)
 
 # --------------------------------------------- #
 def callback_2(a, aux_cont):
-        aux_cont = aux_cont + 1
-        print "Tempo = %d" %(aux_cont)
-        destroy_bt()
-        a = geracao(a, aux_cont)
-        monta(a, aux_cont)
-        root.after(100,lambda: callback_2(a, aux_cont))
+    aux_cont = aux_cont + 1
+    a, populacao = geracao(a, aux_cont)
+    print "-----------------------------"
+    print "Tempo = %d" %(aux_cont)
+    print "População Atual = %d" %(populacao)
+    print "-----------------------------"
+    monta(a, aux_cont)
+    root.after(100,lambda: callback_2(a, aux_cont))
 
 # --------------------------------------------- #
 def destroy_bt():
@@ -68,7 +75,7 @@ def monta(a, aux_cont):
         for i in range(N):
             if a[i][j] == 0:
                 canvas.itemconfig(cell[i][j], fill="white")
-            else:
+            elif a[i][j] == 1:
                 ageYouth, ageMaturiN, ageOld = p(alpha[i][j])
                 if k[i][j] <= ageYouth:
                         canvas.itemconfig(cell[i][j], fill="yellow")
@@ -76,6 +83,8 @@ def monta(a, aux_cont):
                         canvas.itemconfig(cell[i][j], fill="red")
                 else:
                         canvas.itemconfig(cell[i][j], fill="blue")
+            else:
+                canvas.itemconfig(cell[i][j], fill="green")
 
 # (Re)define Botões
     global bt1
@@ -91,6 +100,7 @@ def monta(a, aux_cont):
 # --------------------------------------------- #
 def geracao(a, aux_cont):
     encontrou = 0
+    contaAlpha = 0
     for j in range(N):
         for i in range(N):
             if a[i][j] == 0:
@@ -102,7 +112,8 @@ def geracao(a, aux_cont):
                     alpha[i][j] = beta1 if random.random() > 0.5 else beta2
 
                     k[i][j] = 1
-            else:
+            elif a[i][j] == 1:
+                contaAlpha += 1
                 ageYouth, ageMaturiN, ageOld = p(alpha[i][j])
                 age = ageYouth + ageMaturiN + ageOld
                 if pk(alpha[i][j],k[i][j]) == age:
@@ -111,8 +122,13 @@ def geracao(a, aux_cont):
                 else:
                     k[i][j] = pk(alpha[i][j],k[i][j])
                     k[i][j] += 1
+            elif a[i][j] == -1:
+                move_seeds(i, j)
 
-    return a
+    if aux_cont % plaguePeriod == 0:
+        gera_seeds(contaAlpha)
+
+    return a, contaAlpha
 
 # --------------------------------------------- #
 def find_two_mature_neighbors(i, j):
@@ -223,7 +239,6 @@ def p(_alpha):
 
 # --------------------------------------------- #
 def pk(alpha, k):
-
     ageYouth, ageMaturiN, ageOld = p(alpha)
 
     if (ageYouth + ageMaturiN + ageOld) >= k:
@@ -248,11 +263,15 @@ def crossover(alpha1, alpha2):
 
 # --------------------------------------------- #
 def gera_populacao(p0):
-    for x in range(int(N*N*p0)):
+    x = 0
+    while x < int(N*N*p0):
         i1 = random.randint(0,N-1)
         j1 = random.randint(0,N-1)
 
         randBinList = lambda n: [random.randint(0,1) for b in range(1,n+1)]
+        
+        if a[i1][j1] == 1:
+            x -= 1
 
         a[i1][j1] = 1
         k[i1][j1] = 1
@@ -262,23 +281,128 @@ def gera_populacao(p0):
         alpha[i1][j1][1] = randBinList(m)
 
         alpha[i1][j1][2] = randBinList(n)
+        
+        x += 1
+
+    return x
+
+# --------------------------------------------- #
+def gera_seeds(populacao):
+    x = 0
+    while x < int(populacao*dose):
+        i1 = random.randint(0,N-1)
+        j1 = random.randint(0,N-1)
+        
+        if a[i1][j1] == -1:
+            x -= 1
+
+        if a[i1][j1] == 1:
+            a[i1][j1] = 0
+            k[i1][j1] = 0
+        else:
+            a[i1][j1] = -1
+            k[i1][j1] = 0
+
+        x += 1
+
 
     return
 
+def move_seeds(i, j):
+    selecionado = random.randint(0,7)
+
+    if selecionado == 0:
+        if a[i][j-1] == 1:
+            a[i][j-1] = 0
+            k[i][j-1] = 0
+        else:
+            a[i][j-1] = -1
+            k[i][j-1] = 0
+
+
+    elif selecionado == 1:
+        if a[i+1][j-1] == 1:
+            a[i+1][j-1] = 0
+            k[i+1][j-1] = 0
+        else:
+            a[i+1][j-1] = -1
+            k[i+1][j-1] = 0
+
+    elif selecionado == 2:
+        if a[i+1][j] == 1:
+            a[i+1][j] = 0
+            k[i+1][j] = 0
+        else:
+            a[i+1][j] = -1
+            k[i+1][j] = 0
+
+
+    elif selecionado == 3:
+        if a[i+1][j+1] == 1:
+            a[i+1][j+1] = 0
+            k[i+1][j+1] = 0
+        else:
+            a[i+1][j+1] = -1
+            k[i+1][j+1] = 0
+
+    elif selecionado == 4:
+        if a[i][j+1] == 1:
+            a[i][j+1] = 0
+            k[i][j+1] = 0
+        else:
+            a[i][j+1] = -1
+            k[i][j+1] = 0
+
+
+    elif selecionado == 5:
+        if a[i-1][j+1] == 1:
+            a[i-1][j+1] = 0
+            k[i-1][j+1] = 0
+        else:
+            a[i-1][j+1] = -1
+            k[i-1][j+1] = 0
+
+
+    elif selecionado == 6:
+        if a[i-1][j] == 1:
+            a[i-1][j] = 0
+            k[i-1][j] = 0
+        else:
+            a[i-1][j] = -1
+            k[i-1][j] = 0
+
+
+    elif selecionado == 7:
+        if a[i-1][j-1] == 1:
+            a[i-1][j-1] = 0
+            k[i-1][j-1] = 0
+        else:
+            a[i-1][j-1] = -1
+            k[i-1][j-1] = 0
+
+
+    a[i][j] = 0
+    k[i][j] = 0
+
+
+    return
 
 
 #   MAIN   #
 if __name__ == "__main__":
     aux_cont = 0
+    populacao = 0
     def_var()
 
 
 ### CONFIGURAÇÃO DO SISTEMA ###
-    p0 = 0.90   # Initial densiN (P0)
-    N = 50      # Lattice size (N×N)
-    l = 32      # Youth   - length
-    m = 32      # Mature  - length
-    n = 32      # Old age - length
+    p0 = 0.02           # Initial densiN (P0)
+    N = 50              # Lattice size (N×N)
+    l = 32              # Youth   - length
+    m = 32              # Mature  - length
+    n = 32              # Old age - length
+    dose = 0.4          # quantidade de praga
+    plaguePeriod = 50   # Periodo da praga
 ### ----------------------- ###
 
     # INICIALIZA VARIAVEIS
@@ -291,7 +415,7 @@ if __name__ == "__main__":
     a = [[0 for row in range(-1,N+1)] for col in range(-1,N+1)]
     k = [[0 for row in range(-1,N+1)] for col in range(-1,N+1)]
 
-    gera_populacao(p0)
+    populacao = gera_populacao(p0)
 
     ## Variaveis para desenho no ecran
     XY = 10
