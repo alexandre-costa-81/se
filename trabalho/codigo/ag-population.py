@@ -63,14 +63,24 @@ def callback_2(a, aux_cont):
     print "-----------------------------"
     monta(a, aux_cont)
     destroy_bt()
-    if aux_cont < MAX:
+    if aux_cont < MAX and stop == 0:
         root.after(50,lambda: callback_2(a, aux_cont))
+    elif stop == 0:
+        stop = 0
+        root.after(50,lambda: callback_2(a, aux_cont))
+
+
+# --------------------------------------------- #
+def callback_3(a):
+    global stop
+    stop = 1
+
 
 # --------------------------------------------- #
 def destroy_bt():
-        bt1.destroy()
-        bt2.destroy()
-
+    bt1.destroy()
+    bt2.destroy()
+    bt3.destroy()
 
 # --------------------------------------------- #
 def monta(a, aux_cont):
@@ -92,11 +102,17 @@ def monta(a, aux_cont):
 # (Re)define Botões
     global bt1
     global bt2
-    bt1 = Button(root, text="PRÓXIMA GERAÇAO", command=lambda: callback(a, aux_cont))
+    global bt3
+
+    bt1 = Button(root, text=">", command=lambda: callback(a, aux_cont))
     bt2 = Button(root, text="PLAY", command=lambda: callback_2(a, aux_cont))
+    bt3 = Button(root, text="||", command=lambda: callback_3(a))
     canvas.pack()
-    bt1.pack()
-    bt2.pack()
+
+    bt3.pack(side=LEFT)
+    bt2.pack(side=LEFT)
+    bt1.pack(side=LEFT)
+
     return
 
 
@@ -457,9 +473,10 @@ def move_seeds(i, j):
 if __name__ == "__main__":
     aux_cont = 0
     populacao = 0
-    stop = 0
+    global stop
     def_var()
 
+    stop = 0
 
 ### CONFIGURAÇÃO DO SISTEMA ###
     MAX = 2000
