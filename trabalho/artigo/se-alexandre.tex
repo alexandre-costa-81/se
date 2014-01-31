@@ -5,18 +5,18 @@
 \usepackage{graphicx,url}
 
 \usepackage[brazil]{babel}   
-\usepackage[latin1]{inputenc}  
+\usepackage[utf8]{inputenc}  
 
      
 \sloppy
 
-\title{Trabalho da discliplina de Sistemas Evolutivos:\\ A Cellular Automata
+\title{Trabalho da disciplina de Sistemas Evolutivos:\\ A Cellular Automata
  Model of Population Infected by Periodic Plague}
 
 \author{Alexandre G. da Costa\inst{1}}
 
 
-\address{Centro de Desenvolvimento TecnolÛgico -- Universidade Federal de
+\address{Centro de Desenvolvimento Tecnol√≥gico -- Universidade Federal de
  Pelotas
   (UFPEL)\\
   Pelotas -- RS -- Brasil
@@ -39,48 +39,58 @@
   
 % ----------------------------------------------------------------------------   
 \begin{resumo} 
-  Este trabalho descreve a implementaÁ„o do artigo proposto na diciplina de
-  Sistemas Evolutivos e propıe uma nova abordagem da implementaÁ„o. Esse
-  artigo descreve um algorÌtmo que evolui.
+  Este trabalho descreve a implementa√ß√£o do artigo proposto na disciplina de
+  Sistemas Evolutivos e prop√µe uma nova abordagem da implementa√ß√£o. Esse
+  artigo descreve um algoritmo que evolui.
 \end{resumo}
 
 % ----------------------------------------------------------------------------
-\section{IntroduÁ„o}
+\section{Introdu√ß√£o}
 
-Automato celular È um modelos matematicos que foi desenvolvido para simular a
-evoluÁ„o natural, por exemplo \textit{Game of Life}. Pois ele define tanto o
-meio ambiante como tambÈm os individuos.
+Automato celular √© um modelo matem√°tico que foi desenvolvido para simular a
+evolu√ß√£o natural, por exemplo \textit{Game of Life}. Pois ele define tanto o
+meio ambiante como tamb√©m os indiv√≠duos.
 
 
 % ----------------------------------------------------------------------------
 \section{Trabalhos Relacionados}
-% Nesta sess„o ser· explicado em detalhes o artigo referencial.
+% Nesta sess√£o ser√° explicado em detalhes o artigo referencial.
 
-O artigo referÍncial abordado neste trabalho foi \textit{A Cellular Automata 
-Model of Population Infected by Periodic Plague} de Witold Dzwinel. Ele
-propoe um modelo complementar ao \textit{Penna paradigm}
-\cite{almeida1998theoretical, de1998strategies} que considera a mutaÁ„o
-genÈtica. Ao inves disso, ele analisa a influÍncia de fatores ambientais sobre
-o processo de envelhecimento.
+O artigo referencial abordado neste trabalho foi \textit{A Cellular Automata 
+Model of Population Infected by Periodic Plague} de Witold Dzwinel. Nesse
+artigo Dzwinel prop√µe um modelo complementar ao \textit{Penna paradigm}
+\cite{almeida1998theoretical, de1998strategies} que considera a muta√ß√£o
+gen√©tica. Esse modelo complementar objetiva analisa a influ√™ncia de fatores
+ambientais sobre o processo de envelhecimento.
 
+O modelo implementado no trabalho de \cite{dzwinel:04} assume que o conjunto
+$S(t)$ de indiv√≠duos √© jogado aleat√≥ria mente em uma matriz, bi-dimensional,
+de um Automato Celular (AC). Cada indiv√≠duo fica em uma c√©lula e carrega um
+c√≥digo gen√©tico bin√°rio Figura \ref{fig:codigo-genetico}.
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.5\textwidth]{imagens/codigo-genetico}
+\caption{Exemplo do c√≥digo gen√©tico de um indiv√≠duo.}
+\label{fig:codigo-genetico}
+\end{figure}
 
 % ----------------------------------------------------------------------------
 \section{Proposta}
 
-Nesta sess„o tem o objetivo de explicar o trabalho proposto, ressaltando as
-contribuiÁıes da proposta.
+Nesta sess√£o tem o objetivo de explicar o trabalho proposto, ressaltando as
+contribui√ß√µes da proposta.
 
 
 % ----------------------------------------------------------------------------
-\section{Resultados AlcanÁados}
+\section{Resultados Alcan√ßados}
 
-Se possÌvel comparando com o trabalho referencial.
+Se poss√≠vel comparando com o trabalho referencial.
 
 % ----------------------------------------------------------------------------
-\section{Conclusıes}
+\section{Conclus√µes}
 
-Apresentar as conclusıes  \cite{dzwinel:04}.
+Apresentar as conclus√µes  \cite{dzwinel:04}.
 
 %\begin{figure}[ht]
 %\centering
