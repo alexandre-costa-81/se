@@ -66,27 +66,53 @@ ambientais sobre o processo de envelhecimento.
 O modelo implementado no trabalho de \cite{dzwinel:04} assume que o conjunto
 $S(t)$ de indivíduos é jogado aleatoriamente em uma matriz bi-dimensional
 de um \textbf{Automato Celular} (AC). Cada indivíduo fica em uma célula e
-carrega um código genético binário Figura \ref{fig:codigo-genetico}. O código
-genético é composto de três vetores binários cada um corresponde a um episódio
-de vida: a juventude ``\textbf{y}'', a maturidade ``\textbf{m}'' e a velhice 
+carrega um código genético binário Figura \ref{fig:codigo-genetico} onde é
+mostrado um código genético de oito bits de um indivíduo. O código genético é
+composto de três vetores binários cada um corresponde a um episódio de vida: a
+juventude ``\textbf{y}'', a maturidade ``\textbf{m}'' e a velhice 
 ``\textbf{o}''. Eles não representam a idade biológica dos indivíduos da
 matriz, mas sim a capacidade de reprodução. Apenas indivíduos maduros podem
 reproduzirem-se e ocorre quando esta sendo testado a vizinhança de Moore de
 uma célula desocupada. Essa reprodução é baseada no operador de
 \textit{cross-over} dos algoritmos genéticos.
 
-O tempo de vida de um indivíduo é representado pelo número de 1's no código
-genético. Já tempo máximo de vida é o numero de 1's e 0's dentro do mesmo.
-Cada ``1'' do código genético é lido a cada evolução quando o ultimo for lido
-o indivíduo é removido da matriz CA.
-
-
-\begin{figure}[ht]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=.5\textwidth]{imagens/codigo-genetico}
 \caption{Exemplo do código genético de um indivíduo.}
 \label{fig:codigo-genetico}
 \end{figure}
+
+O tempo de vida de um indivíduo é representado pelo número de 1's no código
+genético. Já o tempo máximo de vida é o numero de 1's e 0's dentro do mesmo.
+Cada ``1'' do código genético é lido a cada evolução quando o ultimo for lido
+o indivíduo é removido da matriz CA.
+
+$A = \left \{a_{ij}\right \}_{NxN}$ é uma matriz de possíveis localizações de
+indivíduos na matriz do automato celular. A variável $a_{ij}$ é uma matriz
+binária de NxN elementos. Quando $a_{ij} = 1$ a célula estará ocupada, já para
+$a_{ij} = 0$ a célula não estará ocupada. Um indivíduo é definido pela matriz
+$\alpha _{ij}$, a Figura \ref{fig:estrutura-alpha} mostra a estrutura da
+matriz alpha.
+
+\begin{figure}[!hb]
+\centering
+\includegraphics[width=.5\textwidth]{imagens/estrutura-alpha}
+\caption{Exemplo das estrutura if-them e alpha \cite{dzwinel:04}.}
+\label{fig:estrutura-alpha}
+\end{figure}
+
+Os vetores binários $\textbf{y}_{ij}$, $\textbf{m}_{ij}$, $\textbf{o}_{ij}$
+representam os episódios de vida de um indivíduo: a ``juventude'', a 
+``maturidade'' e a ``velhice'', respectivamente. As variáveis \textbf{l},
+\textbf{m} e \textbf{n} são os tempos máximos de cada episodio de vida
+enquanto que a duração atual de cada episódio é o numero de 1's em cada vetor
+$\textbf{y}_{ij}$, $\textbf{m}_{ij}$, $\textbf{o}_{ij}$.
+
+A reprodução é feita usando a vizinhança de Moore que procura os dois
+primeiros vizinhos no episódio da ``maturidade'' e passa para um algorítimo
+genético (ag) fazer a reprodução. O simbolo
+
 
 % ----------------------------------------------------------------------------
 \section{Proposta}
