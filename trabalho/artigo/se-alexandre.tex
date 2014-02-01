@@ -76,9 +76,9 @@ reproduzirem-se e ocorre quando esta sendo testado a vizinhança de Moore de
 uma célula desocupada. Essa reprodução é baseada no operador de
 \textit{cross-over} dos algoritmos genéticos.
 
-\begin{figure}[!ht]
+\begin{figure}[ht]
 \centering
-\includegraphics[width=.5\textwidth]{imagens/codigo-genetico}
+\includegraphics[width=.3\textwidth]{imagens/codigo-genetico}
 \caption{Exemplo do código genético de um indivíduo.}
 \label{fig:codigo-genetico}
 \end{figure}
@@ -95,7 +95,7 @@ $a_{ij} = 0$ a célula não estará ocupada. Um indivíduo é definido pela matr
 $\alpha _{ij}$, a Figura \ref{fig:estrutura-alpha} mostra a estrutura da
 matriz alpha.
 
-\begin{figure}[!hb]
+\begin{figure}[h!]
 \centering
 \includegraphics[width=.5\textwidth]{imagens/estrutura-alpha}
 \caption{Exemplo das estrutura if-them e alpha \cite{dzwinel:04}.}
@@ -111,7 +111,37 @@ $\textbf{y}_{ij}$, $\textbf{m}_{ij}$, $\textbf{o}_{ij}$.
 
 A reprodução é feita usando a vizinhança de Moore que procura os dois
 primeiros vizinhos no episódio da ``maturidade'' e passa para um algorítimo
-genético (ag) fazer a reprodução. O simbolo
+genético (ag) fazer a reprodução.
+
+A Figura \ref{fig:pseudo-codigo-evolucao} mostra a sequência de instruções
+do processo de evolução da matriz. A variável \textit{t} é o número de
+gerações do automato celular (tempo). A função p($\alpha _{ij}$) retorna o
+número de 1's no indivíduo \textbf{$\alpha _{ij}$}. Já a função 
+p$_{k}$($\alpha _{ij}$) é definida como segue:
+
+$\forall (a_{ij} = 1 \wedge p(\alpha _{ij}) \geq k); p_{k}(\alpha_{ij}) = k.$
+
+O simbolo $\Omega$ denota o operador de recombinação dos algoritmos genéticos
+\cite{dzwinel:04}. A função $\Omega$ não faz a mutação genética, pois o modelo
+de Dzwinel tem por objetivo analisar a influência de fatores ambientais sobre
+o processo de envelhecimento. Por isso é executado apenas um 
+\textit{cross-over} sobre os dois vizinhos selecionado e escolhido
+aleatoriamente um deles.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.5\textwidth]{imagens/pseudo-codigo-evolucao.png}
+\caption{Pseudo-código que descreve as regras de evolução \cite{dzwinel:04}.}
+\label{fig:pseudo-codigo-evolucao}
+\end{figure}
+
+Agora para o ambiente instável a população pode ser atacada por uma praga que
+é representada por ``\textit{seeds}''. Estas sementes são jogadas na matriz do
+automato celular periodicamente. Se ``\textit{seeds}'' jogada em uma área 
+vazia ela movimenta-se até encontrar um indivíduo, caso contrario ambos são
+eliminados da matriz. Quando uma ``\textit{seeds}'' encontra um indivíduo
+ambos são eliminados da matriz. A força da praga é definida pelo
+$\epsilon_{0}$ que vai ser multiplicado pela população atual.
 
 
 % ----------------------------------------------------------------------------
