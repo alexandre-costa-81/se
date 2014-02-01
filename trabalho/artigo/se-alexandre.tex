@@ -64,9 +64,22 @@ genética. Esse modelo complementar objetiva analisa a influência de fatores
 ambientais sobre o processo de envelhecimento.
 
 O modelo implementado no trabalho de \cite{dzwinel:04} assume que o conjunto
-$S(t)$ de indivíduos é jogado aleatória mente em uma matriz, bi-dimensional,
-de um Automato Celular (AC). Cada indivíduo fica em uma célula e carrega um
-código genético binário Figura \ref{fig:codigo-genetico}.
+$S(t)$ de indivíduos é jogado aleatoriamente em uma matriz bi-dimensional
+de um \textbf{Automato Celular} (AC). Cada indivíduo fica em uma célula e
+carrega um código genético binário Figura \ref{fig:codigo-genetico}. O código
+genético é composto de três vetores binários cada um corresponde a um episódio
+de vida: a juventude ``\textbf{y}'', a maturidade ``\textbf{m}'' e a velhice 
+``\textbf{o}''. Eles não representam a idade biológica dos indivíduos da
+matriz, mas sim a capacidade de reprodução. Apenas indivíduos maduros podem
+reproduzirem-se e ocorre quando esta sendo testado a vizinhança de Moore de
+uma célula desocupada. Essa reprodução é baseada no operador de
+\textit{cross-over} dos algoritmos genéticos.
+
+O tempo de vida de um indivíduo é representado pelo número de 1's no código
+genético. Já tempo máximo de vida é o numero de 1's e 0's dentro do mesmo.
+Cada ``1'' do código genético é lido a cada evolução quando o ultimo for lido
+o indivíduo é removido da matriz CA.
+
 
 \begin{figure}[ht]
 \centering
