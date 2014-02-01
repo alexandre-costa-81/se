@@ -67,14 +67,7 @@ O modelo implementado no trabalho de \cite{dzwinel:04} assume que o conjunto
 $S(t)$ de indivíduos é jogado aleatoriamente em uma matriz bi-dimensional
 de um \textbf{Automato Celular} (AC). Cada indivíduo fica em uma célula e
 carrega um código genético binário Figura \ref{fig:codigo-genetico} onde é
-mostrado um código genético de oito bits de um indivíduo. O código genético é
-composto de três vetores binários cada um corresponde a um episódio de vida: a
-juventude ``\textbf{y}'', a maturidade ``\textbf{m}'' e a velhice 
-``\textbf{o}''. Eles não representam a idade biológica dos indivíduos da
-matriz, mas sim a capacidade de reprodução. Apenas indivíduos maduros podem
-reproduzirem-se e ocorre quando esta sendo testado a vizinhança de Moore de
-uma célula desocupada. Essa reprodução é baseada no operador de
-\textit{cross-over} dos algoritmos genéticos.
+mostrado um código genético de oito bits de um indivíduo.
 
 \begin{figure}[ht]
 \centering
@@ -82,6 +75,14 @@ uma célula desocupada. Essa reprodução é baseada no operador de
 \caption{Exemplo do código genético de um indivíduo.}
 \label{fig:codigo-genetico}
 \end{figure}
+
+O código genético é composto de três vetores binários cada um corresponde a um
+episódio de vida: a juventude ``\textbf{y}'', a maturidade ``\textbf{m}'' e a
+velhice ``\textbf{o}''. Eles não representam a idade biológica dos indivíduos
+da matriz, mas sim a capacidade de reprodução. Apenas indivíduos maduros podem
+reproduzirem-se e ocorre quando esta sendo testado a vizinhança de Moore de
+uma célula desocupada. Essa reprodução é baseada no operador de
+\textit{cross-over} dos algoritmos genéticos.
 
 O tempo de vida de um indivíduo é representado pelo número de 1's no código
 genético. Já o tempo máximo de vida é o numero de 1's e 0's dentro do mesmo.
@@ -114,19 +115,7 @@ primeiros vizinhos no episódio da ``maturidade'' e passa para um algorítimo
 genético (ag) fazer a reprodução.
 
 A Figura \ref{fig:pseudo-codigo-evolucao} mostra a sequência de instruções
-do processo de evolução da matriz. A variável \textit{t} é o número de
-gerações do automato celular (tempo). A função p($\alpha _{ij}$) retorna o
-número de 1's no indivíduo \textbf{$\alpha _{ij}$}. Já a função 
-p$_{k}$($\alpha _{ij}$) é definida como segue:
-
-$\forall (a_{ij} = 1 \wedge p(\alpha _{ij}) \geq k); p_{k}(\alpha_{ij}) = k.$
-
-O simbolo $\Omega$ denota o operador de recombinação dos algoritmos genéticos
-\cite{dzwinel:04}. A função $\Omega$ não faz a mutação genética, pois o modelo
-de Dzwinel tem por objetivo analisar a influência de fatores ambientais sobre
-o processo de envelhecimento. Por isso é executado apenas um 
-\textit{cross-over} sobre os dois vizinhos selecionado e escolhido
-aleatoriamente um deles.
+do processo de evolução da matriz. 
 
 \begin{figure}[ht]
 \centering
@@ -135,20 +124,37 @@ aleatoriamente um deles.
 \label{fig:pseudo-codigo-evolucao}
 \end{figure}
 
+A variável \textit{t} é o número de gerações do automato celular (tempo). A
+função p($\alpha _{ij}$) retorna o número de 1's do indivíduo
+\textbf{$\alpha _{ij}$}. Já a função p$_{k}$($\alpha _{ij}$) é definida como
+segue:
+
+$\forall (a_{ij} = 1 \wedge p(\alpha _{ij}) \geq k); p_{k}(\alpha_{ij}) = k.$
+
+O simbolo \textbf{$\Omega$} denota o operador de recombinação dos algoritmos
+genéticos \cite{dzwinel:04}. A função \textbf{$\Omega$} não faz a mutação
+genética, pois a implementação de Dzwinel tem por objetivo analisar a
+influência de fatores ambientais sobre o processo de envelhecimento. Por isso
+é executado apenas um \textit{cross-over} sobre os dois vizinhos selecionado e
+escolhido aleatoriamente um deles.
+
 Agora para o ambiente instável a população pode ser atacada por uma praga que
 é representada por ``\textit{seeds}''. Estas sementes são jogadas na matriz do
 automato celular periodicamente. Se ``\textit{seeds}'' jogada em uma área 
 vazia ela movimenta-se até encontrar um indivíduo, caso contrario ambos são
 eliminados da matriz. Quando uma ``\textit{seeds}'' encontra um indivíduo
 ambos são eliminados da matriz. A força da praga é definida pelo
-$\epsilon_{0}$ que vai ser multiplicado pela população atual.
+$\epsilon_{0}$ que vai ser multiplicado pela população atual e vai definir o
+número de ``\textit{seeds}'' que vão ser geradas.
 
 
 % ----------------------------------------------------------------------------
 \section{Proposta}
+%Nesta sessão tem o objetivo de explicar o trabalho proposto, ressaltando as
+%contribuições da proposta.
 
-Nesta sessão tem o objetivo de explicar o trabalho proposto, ressaltando as
-contribuições da proposta.
+O presente artigo tem o objetivo de fazer uma modificação na proposta por 
+Dzwinel. Para fazer a reprodução 
 
 
 % ----------------------------------------------------------------------------
@@ -160,22 +166,6 @@ Se possível comparando com o trabalho referencial.
 \section{Conclusões}
 
 Apresentar as conclusões  \cite{dzwinel:04}.
-
-%\begin{figure}[ht]
-%\centering
-%\includegraphics[width=.5\textwidth]{fig1.jpg}
-%\caption{A typical figure}
-%\label{fig:exampleFig1}
-%\end{figure}
-
-%\begin{figure}[ht]
-%\centering
-%\includegraphics[width=.3\textwidth]{fig2.jpg}
-%\caption{This figure is an example of a figure caption taking more than one
-%  line and justified considering margins mentioned in
-% Section~\ref{sec:figs}.}
-%\label{fig:exampleFig2}
-%\end{figure}
 
 %\begin{table}[ht]
 %\centering
