@@ -153,15 +153,33 @@ número de ``\textit{seeds}'' que vão ser geradas.
 %Nesta sessão tem o objetivo de explicar o trabalho proposto, ressaltando as
 %contribuições da proposta.
 
-O presente artigo tem o objetivo de fazer uma modificação na que foi proposta
+O presente artigo tem o objetivo de fazer uma modificação na solução proposta
 por Dzwinel. Para fazer a reprodução ele usa basicamente o operador de cross-
 over e sorteia aleatoriamente um dos vizinhos resultante. Para este trabalho, 
-para fazer a reprodução sera usado a técnica de \textbf{Busca Tabu}
-\textit{Tabu Search}.
+para fazer a reprodução sera usado parte da técnica de \textbf{Busca Tabu}
+(\textit{Tabu Search}).
 
 A Busca Tabu é uma técnica de busca local que teve origem nos trabalhos de
 Fred Glover e Pierre Hansen. De forma prática essa técnica salta de uma
-solução para outra buscando o seu melhor vizinho.
+solução para outra que seja seu melhor vizinho e conforme salta armazena as
+melhores soluções encontradas para escapar do ótimo local.
+
+A Figura \ref{fig:busca-tabu} mostra o processo de escolha da Busca Tabu.
+Onde é selecionado uma solução aleatoriamente, no exemplo foi a célula B2 com
+o avaliação igual a 90.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=.5\textwidth]{imagens/busca-tabu}
+\caption{Exemplo do processo da Busca Tabu.}
+\label{fig:busca-tabu}
+\end{figure}
+
+Inicialmente é avaliado cada vizinho e selecionado o que tem a melhor
+avaliação, no exemplo foi a célula C2 com avaliação 80. Em seguida é colocado
+a célula B2 na lista Tabu que é uma lista de movimentos proibidos. O processo
+de avaliar a vizinhança é realizado para a célula B2, mas observando a lista
+Tabu.
 
 
 % ----------------------------------------------------------------------------
