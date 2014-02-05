@@ -42,7 +42,6 @@ def def_var():
     global canvas
     global cell
     global N
-    global N
     global stop
 
 # --------------------------------------------- #
@@ -55,6 +54,9 @@ def callback(a, aux_cont):
 
 # --------------------------------------------- #
 def callback_2(a, aux_cont):
+    global stop
+    global MAX
+
     aux_cont = aux_cont + 1
     a, populacao = geracao(a, aux_cont)
     print "-----------------------------"
@@ -65,9 +67,7 @@ def callback_2(a, aux_cont):
     destroy_bt()
     if aux_cont < MAX and stop == 0:
         root.after(50,lambda: callback_2(a, aux_cont))
-    elif stop == 0:
-        stop = 0
-        root.after(50,lambda: callback_2(a, aux_cont))
+
 
 
 # --------------------------------------------- #
@@ -480,8 +480,8 @@ if __name__ == "__main__":
 
 ### CONFIGURAÇÃO DO SISTEMA ###
     MAX = 2000
-    p0 = 0.02           # Initial densiN (P0)
-    N = 50              # Lattice size (N×N)
+    p0 = 0.45           # Initial densiN (P0)
+    N = 100              # Lattice size (N×N)
     l = 32              # Youth   - length
     m = 32              # Mature  - length
     n = 32              # Old age - length
@@ -493,20 +493,20 @@ if __name__ == "__main__":
     ## Variaveis de configuração do automato celular
     L = l+m+n
     youth = [0 for col in range(l)]
-    maturiN = [0 for col in range(m)]
+    maturit = [0 for col in range(m)]
     old = [0 for col in range(n)]
-    alpha = [[[youth, maturiN, old] for row in range(-1,N+1)] for col in range(-1,N+1)]
+    alpha = [[[youth, maturit, old] for row in range(-1,N+1)] for col in range(-1,N+1)]
     a = [[0 for row in range(-1,N+1)] for col in range(-1,N+1)]
     k = [[0 for row in range(-1,N+1)] for col in range(-1,N+1)]
 
     populacao = gera_populacao(p0)
 
     ## Variaveis para desenho no ecran
-    XY = 10
+    XY = 5
     root = Tk()
     root.title("Simulador do Ambiênte")
 
-    canvas  = Canvas(root, width=N*10, height=N*10, highlightthickness=0, bd=0, bg='white')
+    canvas  = Canvas(root, width=N*XY, height=N*XY, highlightthickness=0, bd=0, bg='white')
     cell = [[0 for row in range(-1,N+1)] for col in range(-1,N+1)]
 
     for j in range(N):
