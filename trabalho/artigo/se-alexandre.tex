@@ -181,6 +181,29 @@ a célula B2 na lista Tabu que é uma lista de movimentos proibidos. O processo
 de avaliar a vizinhança é realizado para a célula B2, mas observando a lista
 Tabu.
 
+A lista Tabu reduz o risco do algoritmo entrar em ciclo, porem pode proibir
+movimentos para uma solução que ainda não foi visitada. Para evitar isso
+existe a \textbf{função de aspiração} que é a função que retira uma solução da
+lista Tabu.
+
+A Busca Tabu é interrompida quando atingir um número máximo de iterações sem
+melhora na solução e quando o valor da melhor solução for menor que a menor
+solução conhecida ou próxima a ela.
+
+Os parâmetros de controle da Busca Tabu são o tamanho da lista tabu, a função
+de aspiração, o número de soluções vizinhas testadas em cada iteração e o
+número máximo de iterações sem melhoras na solução.
+
+Para este trabalho foi modificada a implementação feita em \cite{dzwinel:04}
+que utilizou um Algoritmo Genético, sem mutação genética, para fazer a 
+reprodução dos indivíduos. A reprodução acontecia através do
+\textit{cross-over} do código genético de dois vizinhos maduros gerando dois
+filhos. E a escolha de qual filho seria escolhido era aleatória. Para
+tentar obter resultados melhores foi modificado a forma de buscar os vizinhos,
+onde agora é testado todos os vizinhos maduros e selecionado os dois melhores.
+Estes são combinados usando \textit{cross-over} e ambos são avaliados para
+o melhor entre eles tornar-se o indivíduo da célula testada. 
+
 
 % ----------------------------------------------------------------------------
 \section{Resultados Alcançados}
