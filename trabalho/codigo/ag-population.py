@@ -471,12 +471,11 @@ def move_seeds(i, j):
 
 #   MAIN   #
 if __name__ == "__main__":
+    global stop
     aux_cont = 0
     populacao = 0
-    global stop
-    def_var()
-
     stop = 0
+    def_var()
 
 ### CONFIGURAÇÃO DO SISTEMA ###
     MAX = 2000
