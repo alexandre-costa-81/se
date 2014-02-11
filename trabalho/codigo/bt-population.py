@@ -12,6 +12,7 @@ from Tkinter import *
 import random
 import time
 from datetime import datetime
+import sys
 
 # GLOBAL
 
@@ -92,6 +93,7 @@ def destroy_bt():
 def monta(aux_cont):
     global a
     global alpha
+    global cell
 
     for j in range(N):
         for i in range(N):
@@ -318,6 +320,7 @@ def gera_populacao(p0):
 
     return x
 
+
 # --------------------------------------------- #
 def gera_seeds(populacao):
     x = 0
@@ -341,6 +344,8 @@ def gera_seeds(populacao):
     return
 
 def move_seeds(i, j):
+    global a
+    global k
     selecionado = random.randint(0,7)
 
     if selecionado == 0:
@@ -355,8 +360,8 @@ def move_seeds(i, j):
             a[i][j] = 0
             k[i][j] = 0
         else:
-			a[i][j] = -1
-			k[i][j] = 0
+      			a[i][j] = -1
+      			k[i][j] = 0
 
 
     elif selecionado == 1:
@@ -372,8 +377,8 @@ def move_seeds(i, j):
             k[i][j] = 0
 
         else:
-			a[i][j] = -1
-			k[i][j] = 0
+      			a[i][j] = -1
+      			k[i][j] = 0
 
 
     elif selecionado == 2:
@@ -389,8 +394,8 @@ def move_seeds(i, j):
             k[i][j] = 0
 
         else:
-			a[i][j] = -1
-			k[i][j] = 0
+      			a[i][j] = -1
+      			k[i][j] = 0
 
 
     elif selecionado == 3:
@@ -406,8 +411,8 @@ def move_seeds(i, j):
             k[i][j] = 0
 
         else:
-			a[i][j] = -1
-			k[i][j] = 0
+      			a[i][j] = -1
+      			k[i][j] = 0
 
 
     elif selecionado == 4:
@@ -423,8 +428,8 @@ def move_seeds(i, j):
             k[i][j] = 0
 
         else:
-			a[i][j] = -1
-			k[i][j] = 0
+      			a[i][j] = -1
+      			k[i][j] = 0
 
 
     elif selecionado == 5:
@@ -440,8 +445,8 @@ def move_seeds(i, j):
             k[i][j] = 0
 
         else:
-			a[i][j] = -1
-			k[i][j] = 0
+      			a[i][j] = -1
+      			k[i][j] = 0
 
 
     elif selecionado == 6:
@@ -457,8 +462,8 @@ def move_seeds(i, j):
             k[i][j] = 0
 
         else:
-			a[i][j] = -1
-			k[i][j] = 0
+      			a[i][j] = -1
+      			k[i][j] = 0
 
 
     elif selecionado == 7:
@@ -474,8 +479,8 @@ def move_seeds(i, j):
             k[i][j] = 0
 
         else:
-			a[i][j] = -1
-			k[i][j] = 0
+      			a[i][j] = -1
+      			k[i][j] = 0
 
 
 
@@ -546,14 +551,14 @@ if __name__ == "__main__":
     def_var()
 
 ### CONFIGURAÇÃO DO SISTEMA ###
-    MAX = 2000
-    p0 = 0.75           # Initial densiN (P0)
-    N = 100              # Lattice size (N×N)
+    MAX = 600
+    p0 = 0.02           # Initial densiN (P0)
+    N = 100             # Lattice size (N×N)
     l = 32              # Youth   - length
     m = 32              # Mature  - length
     n = 32              # Old age - length
     dose = 0.4          # quantidade de praga
-    plaguePeriod = 2000   # Periodo da praga
+    plaguePeriod = 50   # Periodo da praga
     TBLen = 2           # tamanho da lista tabu
 ### ----------------------- ###
 
@@ -569,14 +574,26 @@ if __name__ == "__main__":
 
     populacao = gera_populacao(p0)
 
-    print "Tamanho da Matriz, %dX%d" %(N,N)
-    print "Dencidade Inicial, %f" %p0
-    print "Comprimento - Jovem, %d" %l
-    print "Comprimento - Maduro, %d" %m
-    print "Comprimento - Idoso, %d" %n
-    print "Quantidade de Praga, %f" %dose
-    print "Período da Praga, %d" %plaguePeriod
-    print "Tamanho da Lista Tabu, %d" %TBLen  
+
+    if plaguePeriod > 2000:
+      textoPraga = "sem-praga"
+    else:
+      textoPraga = "com-praga"
+
+
+    teste = 'simulacao-matriz-'+str(p0)+'-'+textoPraga+'.cvs'
+
+    sys.stdout = open(teste, 'a')
+
+    print textoPraga
+    print "Tamanho da Matriz,%dX%d" %(N,N)
+    print "Dencidade Inicial,%f" %p0
+    print "Comprimento - Jovem,%d" %l
+    print "Comprimento - Maduro,%d" %m
+    print "Comprimento - Idoso,%d" %n
+    print "Quantidade de Praga,%f" %dose
+    print "Período da Praga,%d" %plaguePeriod
+    print "Tamanho da Lista Tabu,%d" %TBLen  
     print "--------------,------------"
     print "Iteração,População Atual"
 
