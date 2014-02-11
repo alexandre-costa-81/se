@@ -49,7 +49,9 @@
 
 Automato celular é um modelo matemático que foi desenvolvido para simular a
 evolução natural, por exemplo \textit{Game of Life}. Pois ele define tanto o
-meio ambiante como também os indivíduos.
+meio ambiante como também os indivíduos. Neste trabalho o automato celular é
+desenvolvido em cima de uma matriz bi-dimensional de células idênticas. Cada
+célula é modificada conforme passa o tempo.
 
 
 % ----------------------------------------------------------------------------
@@ -261,17 +263,25 @@ que houve um crescimento precoce da população. No gráficos das Figuras
 original. Já o gráfico da Figura \ref{fig:cenarios} F é o único que difere
 radicalmente do algoritmo original, pois no gráfico original a toda a primeira
 geração da população envelhece e morre junto e no algoritmo deste trabalho a
-população tem uma maior diversidade e se desenvolve em intervalos diferentes.
-Este comportamento pode ser possível pelo fato da Busca Tabu selecionar o
-melhor filho do individuo e não fazer uma escolha aleatória. Isso pode ser
-o motivo, também, de a população se desenvolver precocemente nos casos
-anteriores.
+população tem uma maior diversidade e se desenvolve em intervalos diferentes
+restando focos populacionais que desenvolvem-se posteriormente. Este 
+comportamento pode ser possível pelo fato da Busca Tabu selecionar o melhor 
+filho dos indivíduos e não fazer uma escolha aleatória. Isso pode ser o motivo, 
+também, de a população se desenvolver precocemente nos casos anteriores.
 
 
 % ----------------------------------------------------------------------------
 \section{Conclusões}
+%Apresentar as conclusões  \cite{dzwinel:04}.
 
-Apresentar as conclusões  \cite{dzwinel:04}.
+Neste trabalho feito uma pesquisa em cima de um artigo proposto e realizado 
+uma nova implementação deste artigo. O artigo proposto tratava de automatos
+celulares utilizando algoritmos genéticos para fazer a evolução. Já a
+implementação proposta neste artigo é uma modificação que da evolução usando
+um algoritmo hibrido. Este foi implementado usando a Busca Tabu com parte dos
+genéticos (\texit{cross-over}). Os resultados obtidos não foram os esperados,
+por isso ainda é preciso avaliar melhor a implentação proposta para tentar
+encontrar possíveis erros.
 
 % ----------------------------------------------------------------------------
 
