@@ -217,11 +217,55 @@ mostra os parametros de uma execução tipica.
 
 \begin{table}[ht]
 \centering
-\caption{Parametro de uma simulação tipica.}
+\caption{Parametro de uma simulação tipica \cite{dzwinel:04}.}
 \label{tab:parametro-simulacao}
 \includegraphics[width=.7\textwidth]{imagens/parametro-simulacao}
 \end{table}
 
+A população é gerada de acordo com a porcentagem da variável P0 e inicialmente
+toda a população é jovem. Por isso a simulação depende muito dessa variável,
+porque dependendo do tamanho dela a população pode morrer em pouco tempo como
+também pode sobreviver ver Figura \ref{fig:crescimento-populacao-no-tempo}.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=.5\textwidth]{imagens/crescimento-populacao-no-tempo}
+\caption{Cenários do crescimento populacional no tempo variando P0 (tamanho 
+da população inicial). A simulação foi iniciada assumindo que todos os 
+indivíduos são "jovens". A rede CA de tamanho 100x100 foi simulado 
+\cite{dzwinel:04}.}
+\label{fig:crescimento-populacao-no-tempo}
+\end{figure}
+
+O presente trabalho foi desenvolvido em cima dos resultados apresentados na
+Figura \cite{dzwinel:04}. No primeiro momento foi desenvolvido um algoritmo
+para reproduzir os mesmos gráficos dessa figura e, em seguida, foi
+implementado um baseado na Busca Tabu que gerou os gráficos da Figura 
+\ref{fig:cenarios}.
+
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=.9\textwidth]{imagens/cenarios}
+\caption{Cenarios do crescimento populacional em relação ao tempo variando P0,
+com a Busca Tabu fazendo a evolução.}
+\label{fig:cenarios}
+\end{figure}
+
+Comparando os graficos das Figuras \ref{fig:crescimento-populacao-no-tempo} e
+\ref{fig:cenarios} podemos observar que a curva de quase todos os gráficos
+são semelhantes entre si, onde apenas o ultimo gráfico tem uma diferença 
+radical. Nos gráficos da Figura \ref{fig:cenarios} A e B é possível observar
+que houve um crescimento precoce da população. No gráficos das Figuras
+\ref{fig:cenarios} C, D e E tem o comportamento semelhante ao do algoritmo
+original. Já o gráfico da Figura \ref{fig:cenarios} F é o único que difere
+radicalmente do algoritmo original, pois no gráfico original a toda a primeira
+geração da população envelhece e morre junto e no algoritmo deste trabalho a
+população tem uma maior diversidade e se desenvolve em intervalos diferentes.
+Este comportamento pode ser possível pelo fato da Busca Tabu selecionar o
+melhor filho do individuo e não fazer uma escolha aleatória. Isso pode ser
+o motivo, também, de a população se desenvolver precocemente nos casos
+anteriores.
 
 
 % ----------------------------------------------------------------------------
