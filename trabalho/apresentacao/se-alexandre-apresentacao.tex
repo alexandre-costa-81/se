@@ -51,37 +51,44 @@
 	\end{itemize}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Autômatos Celulares}
-	\begin{itemize}
-		\item Autômatos Celulares
-	\end{itemize}
-\end{frame}
-
-\begin{frame}
-	\frametitle{Algoritmos Genéticos}
-
-
-\end{frame}
-
-\begin{frame}
-\frametitle{Busca Tabu}
-\end{frame}
-
 % ----------------------------------------------------------------------------
 % Trabalhos Relacionados
 % ----------------------------------------------------------------------------
 \section{Trabalhos Relacionados}
 \begin{frame}{Trabalhos Relacionados}
 %\frametitle{Trabalhos Relacionados}
+	\begin{itemize}
+		\item \textit{A Cellular Automata Model of Population Infected by
+		Periodic Plague} \cite{dzwinel:04}
+		\item A evolução de uma população constituída por indivíduos é
+		inspirado na rede de autômatos celulares 2D.
+		\item Cada Indivíduo carrega seu próprio ``código genético''
+		representa três episódios da vida: a ``Juventude'', a ``maturidade'' e
+		a ``velhice''.
+		\item Os indivíduos são tratados como agentes independentes que podem
+		se reproduzir de acordo com o operador de recombinação (cross-over)
+		dos algoritmos genéticos.
+		\item Somente as pessoas ``maduras'' da vizinhança de Moore de um nó
+		de desocupado é capazes de se reproduzir.
+	\end{itemize}
 \end{frame}
 
 % ----------------------------------------------------------------------------
 % Proposta
 % ----------------------------------------------------------------------------
-%\section{Proposta}
+\section{Proposta}
 \begin{frame}{Proposta}
 %\frametitle{Proposta}
+	\begin{itemize}
+		\item Objetivo do trabalho foi aperfeiçoar a recombinação proposta
+		por Dzwinel;
+		\item Que fazia a recombinação (\textit{cross-over}) e selecionava
+		um dos filhos aleatoriamente;
+		\item A proposta é fazer a recombinação e selecionar o melhor filho
+		guardando o código dele na Lista Tabu;
+		\item Nesta lista vão ficar apenas indivíduos que não podem ser
+		selecionados.  
+	\end{itemize}
 \end{frame}
 
 % ----------------------------------------------------------------------------
