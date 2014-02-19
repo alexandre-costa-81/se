@@ -13,11 +13,10 @@ import random
 import time
 from datetime import datetime
 import sys
+import os
+
 
 # GLOBAL
-
-
-
 # --------------------------------------------- #
 def def_var():
     # DECLARA VARIAVEIS
@@ -55,8 +54,10 @@ def callback(aux_cont):
     global a
 
     aux_cont = aux_cont + 1
-    print "Tempo = %d" %(aux_cont)
+
     a, populacao = geracao(aux_cont)
+    print "Tempo - População"
+    print "%d - %d" %(aux_cont, populacao)
     destroy_bt()
     monta(aux_cont)
 
@@ -132,6 +133,7 @@ def geracao(aux_cont):
     global a
     global alpha
     global k
+    global agc
 
     encontrou = 0
     contaAlpha = 0
@@ -156,8 +158,19 @@ def geracao(aux_cont):
                 else:
                     k[i][j] = pk(alpha[i][j],k[i][j])
                     k[i][j] += 1
+
+    agc = 0
+    for j in range(N):
+        for i in range(N):
+            if a[i][j] == 1:
+                move_individuo(i,j)
             elif a[i][j] == -1:
                 move_seeds(i, j)
+
+    for j in range(N):
+        for i in range(N):
+            if a[i][j] == 1:
+              agc += 1
 
     if aux_cont % plaguePeriod == 0:
         gera_seeds(contaAlpha)
@@ -263,11 +276,8 @@ def p(_alpha):
                 if _alpha[x1][y1] == 1:
                     old1 += 1
 
+
     age = youth1, maturi1, old1
-            
-#    for col in range(L):
-#        if alpha[col] == 1:
-#            age += 1
 
     return age
 
@@ -297,6 +307,10 @@ def crossover(alpha1, alpha2):
 
 # --------------------------------------------- #
 def gera_populacao(p0):
+    global a
+    global k
+    global alpha
+
     x = 0
     while x < int(N*N*p0):
         i1 = random.randint(0,N-1)
@@ -339,7 +353,6 @@ def gera_seeds(populacao):
             k[i1][j1] = 0
 
         x += 1
-
 
     return
 
@@ -541,9 +554,95 @@ def busca_tabu(filho1, filho2):
     return filho2
 
 
+def move_individuo(i, j):
+  global a
+  global alpha
+  global k
+  global agc
+  selecionado = random.randint(0,7)
+
+  if selecionado == 0 and j > 0:
+    if a[i][j-1] == 0:
+      a[i][j-1] = 1
+      k[i][j-1] = k[i][j]
+      alpha[i][j-1] = alpha[i][j]
+      a[i][j] = 0
+      k[i][j] = 0
+      alpha[i][j] = [[0 for col in range(l)], [0 for col in range(m)], [0 for col in range(n)]]
+
+  if selecionado == 1 and i < N and j > 0:
+    if a[i+1][j-1] == 0:
+      a[i+1][j-1] = 1
+      k[i+1][j-1] = k[i][j]
+      alpha[i+1][j-1] = alpha[i][j]
+      a[i][j] = 0
+      k[i][j] = 0
+      alpha[i][j] = [[0 for col in range(l)], [0 for col in range(m)], [0 for col in range(n)]]
+
+  if selecionado == 2 and i < N:
+    if a[i+1][j] == 0:
+      a[i+1][j] = 1
+      k[i+1][j] = k[i][j]
+      alpha[i+1][j] = alpha[i][j]
+      a[i][j] = 0
+      k[i][j] = 0
+      alpha[i][j] = [[0 for col in range(l)], [0 for col in range(m)], [0 for col in range(n)]]
+
+  if selecionado == 3 and i < N and j < N:
+    if a[i+1][j+1] == 0:
+      a[i+1][j+1] = 1
+      k[i+1][j+1] = k[i][j]
+      alpha[i+1][j+1] = alpha[i][j]
+      a[i][j] = 0
+      k[i][j] = 0
+      alpha[i][j] = [[0 for col in range(l)], [0 for col in range(m)], [0 for col in range(n)]]
+
+  if selecionado == 4 and j < N:
+    if a[i][j+1] == 0:
+      a[i][j+1] = 1
+      k[i][j+1] = k[i][j]
+      alpha[i][j+1] = alpha[i][j]
+      a[i][j] = 0
+      k[i][j] = 0
+      alpha[i][j] = [[0 for col in range(l)], [0 for col in range(m)], [0 for col in range(n)]]
+
+  if selecionado == 5 and i > 0 and j < N:
+    if a[i-1][j+1] == 0:
+      a[i-1][j+1] = 1
+      k[i-1][j+1] = k[i][j]
+      alpha[i-1][j+1] = alpha[i][j]
+      a[i][j] = 0
+      k[i][j] = 0
+      alpha[i][j] = [[0 for col in range(l)], [0 for col in range(m)], [0 for col in range(n)]] 
+
+  if selecionado == 6 and i > 0:
+    if a[i-1][j] == 0:
+      a[i-1][j] = 1
+      k[i-1][j] = k[i][j]
+      alpha[i-1][j] = alpha[i][j]
+      a[i][j] = 0
+      k[i][j] = 0
+      alpha[i][j] = [[0 for col in range(l)], [0 for col in range(m)], [0 for col in range(n)]]
+
+  if selecionado == 7 and i > 0 and j > 0:
+    if a[i-1][j-1] == 0:
+      a[i-1][j-1] = 1
+      k[i-1][j-1] = k[i][j]
+      alpha[i-1][j-1] = alpha[i][j]
+      a[i][j] = 0
+      k[i][j] = 0
+      alpha[i][j] = [[0 for col in range(l)], [0 for col in range(m)], [0 for col in range(n)]]
+  return
+
+
+
 
 #   MAIN   #
 if __name__ == "__main__":
+    global a
+    global alpha
+    global k
+
     aux_cont = 0
     populacao = 0
     stop = 0
@@ -551,14 +650,14 @@ if __name__ == "__main__":
     def_var()
 
 ### CONFIGURAÇÃO DO SISTEMA ###
-    MAX = 600
+    MAX = 2000
     p0 = 0.02           # Initial densiN (P0)
     N = 100             # Lattice size (N×N)
     l = 32              # Youth   - length
     m = 32              # Mature  - length
     n = 32              # Old age - length
     dose = 0.4          # quantidade de praga
-    plaguePeriod = 50   # Periodo da praga
+    plaguePeriod = 2050 # Periodo da praga. Foi definido 2050 para não aparecer a praga. O padrão é 50.
     TBLen = 2           # tamanho da lista tabu
 ### ----------------------- ###
 

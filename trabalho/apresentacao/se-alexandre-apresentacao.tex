@@ -69,7 +69,7 @@
 		se reproduzir de acordo com o operador de recombinação (cross-over)
 		dos algoritmos genéticos.
 		\item Somente as pessoas ``maduras'' da vizinhança de Moore de um nó
-		de desocupado é capazes de se reproduzir.
+		de desocupado são capazes de se reproduzir.
 	\end{itemize}
 \end{frame}
 
@@ -114,8 +114,17 @@ indivíduos são "jovens". A rede CA de tamanho 100x100 foi simulado
 \begin{figure}[h!]
 \centering
 \includegraphics[width=.5\textwidth]{../artigo/imagens/escolha-melhor-vizinho}
-\caption{Exemplo de seleção do melhor vizinho.}
-\label{fig:busca-tabu}
+\caption{Exemplo de seleção do melhores vizinhos.}
+\label{fig:escolha-melhor-vizinho}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Proposta}
+\begin{figure}[h!]
+\centering
+\includegraphics[width=.9\textwidth]{../artigo/imagens/cross-over-pais}
+\caption{\textit{Cross-over} dos pais.}
+\label{fig:cross-over-pais}
 \end{figure}
 \end{frame}
 
@@ -127,7 +136,7 @@ indivíduos são "jovens". A rede CA de tamanho 100x100 foi simulado
 \centering
 \includegraphics[width=.5\textwidth]{../artigo/imagens/lista-tabu}
 \caption{Exemplo da lista Tabu.}
-\label{fig:busca-tabu}
+\label{fig:lista-tabu}
 \end{figure}
 \end{frame}
 
@@ -147,13 +156,29 @@ indivíduos são "jovens". A rede CA de tamanho 100x100 foi simulado
 \label{tab:parametro-simulacao}
 \includegraphics[width=.7\textwidth]{../artigo/imagens/parametro-simulacao}
 \end{table}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=.5\textwidth]{../artigo/imagens/configuracao-bt}
+\caption{Configuração do sistema usando Busca Tabu.}
+\label{fig:configuracao-br}
+\end{figure}
+
 \end{frame}
 
 \begin{frame}{Resultados Alcançados}
 	\begin{itemize}
 		\item Os parâmetros utilizados neste trabalho foram os mesmos de
-		Dzwinel.
+		Dzwinel;
+		\item O comportamento do algoritmo foi semelhante ao original;
+		\item Mas a população chega ao limite mais rapidamente.
 	\end{itemize}
+\begin{figure}[h!]
+\centering
+\includegraphics[width=.7\textwidth]{../artigo/imagens/cenarios}
+\caption{Cenarios com o crescimento populacional.}
+\label{fig:cenarios}
+\end{figure}
 \end{frame}
 
 % ----------------------------------------------------------------------------
@@ -161,7 +186,13 @@ indivíduos são "jovens". A rede CA de tamanho 100x100 foi simulado
 % ----------------------------------------------------------------------------
 \section{Conclusões}
 \begin{frame}{Conclusões}
-%\frametitle
+	\begin{itemize}
+		\item Os resultados obtidos não foram os esperados;
+		\item O motivo da população evoluir mais rápido poderia ser pelo fato
+		de escolher sempre os melhores vizinhos;
+		\item Porem isso não exclui a hipótese de poder haver um erro na
+		implementação.
+	\end{itemize}
 \end{frame}
 
 

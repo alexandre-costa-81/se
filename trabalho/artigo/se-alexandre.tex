@@ -30,29 +30,63 @@
 
 % ----------------------------------------------------------------------------
 \begin{abstract}
-  This meta-paper describes the style to be used in articles and short papers
-  for SBC conferences. For papers in English, you should add just an abstract
-  while for the papers in Portuguese, we also ask for an abstract in
-  Portuguese (``resumo''). In both cases, abstracts should not have more than
-  10 lines and must be in the first page of the paper.
+  This paper describes the implementation of the proposed article in the
+  discipline of Evolutionary Systems and proposes a new approach to
+  implementation. This article describes an algorithm that evolves based on
+  a cellular automaton and each iteration evolves the population according to
+  the rules of evolution.
 \end{abstract}
   
 % ----------------------------------------------------------------------------   
 \begin{resumo} 
   Este trabalho descreve a implementação do artigo proposto na disciplina de
   Sistemas Evolutivos e propõe uma nova abordagem da implementação. Esse
-  artigo descreve um algoritmo que evolui.
+  artigo descreve um algoritmo que evolui usando como base um automato 
+  celular e a cada iteração evolui a população de acordo com as regras de
+  evolução.
 \end{resumo}
 
 % ----------------------------------------------------------------------------
 \section{Introdução}
 
+Este trabalho é a atividade final da disciplina de Sistemas Evolutivos do
+Programa de pós-graduação em Ciência da Computação da Universidade Federal de
+Pelotas. Para realizar esta atividade foi escolhido o artigo \textit{A
+Cellular Automata Model of Population Infected by Periodic Plague} que trata
+da evolução de uma população constituída por indivíduos, inspirado na rede de
+autômatos celulares 2D. Cada Indivíduo carrega seu próprio ``código genético''
+representa três episódios da vida: a ``Juventude'', a ``maturidade'' e
+a ``velhice''. Os indivíduos são tratados como agentes independentes que podem
+se reproduzir de acordo com o operador de recombinação (cross-over) dos
+algoritmos genéticos. Somente as pessoas ``maduras'' da vizinhança de Moore de
+um nó de desocupado são capazes de se reproduzir \cite{dzwinel:04}.
+
 Automato celular é um modelo matemático que foi desenvolvido para simular a
 evolução natural, por exemplo \textit{Game of Life}. Pois ele define tanto o
 meio ambiante como também os indivíduos. Neste trabalho o automato celular é
 desenvolvido em cima de uma matriz bi-dimensional de células idênticas. Cada
-célula é modificada conforme passa o tempo.
+célula é modificada conforme passa o tempo. Em cata iteração a matriz
+bi-dimensional é varrida até encontrar um célula vazia. Assim que encontra é
+utilizado o conceito da vizinhança de Moore que busca em toda a vizinhança por
+vizinhos ``maduros''. Quando encontra dois indivíduos maduros na vizinhança é
+aplicado uma recombinação (\textit{cross-over}) dos algoritmos genéticos.
 
+Um Algoritmo Genético (AG) é uma técnica de busca utilizada na ciência da
+computação para achar soluções aproximadas em problemas de otimização e busca 
+\cite{wiki:ag}. Neste trabalho não é realizado a mutação e o \textit{cross-over} é implementado da forma mais simples, ou seja, divide no meio e cruza o
+código.
+
+Neste trabalho será reproduzido o algoritmo original, para em seguida aplicar
+a Busca Tabu. A Busca Tabu é uma Meta-heurística e um procedimento adaptativo
+auxiliar, que guia um algoritmo de busca local na exploração contínua dentro
+de um espaço de busca \cite{wiki:bt}.
+
+O restante do trabalho divide-se da seguinte forma: a sessão 2 trata dos
+trabalhos relacionados e vai explicar como funciona o algoritmo proposto por
+Dzwinel. Já a sessão 3 vai explicar como foi feita a modificação nesse
+algoritmo proposto. Logo em seguida, na sessão 4 é apresentado os resultados
+alcançados com a modificação proposta. Por fim vem a sessão de conclusão que
+fala da implementação e dos resultados alcançados.
 
 % ----------------------------------------------------------------------------
 \section{Trabalhos Relacionados}
@@ -274,13 +308,13 @@ também, de a população se desenvolver precocemente nos casos anteriores.
 \section{Conclusões}
 %Apresentar as conclusões  \cite{dzwinel:04}.
 
-Neste trabalho feito uma pesquisa em cima de um artigo proposto e realizado 
-uma nova implementação deste artigo. O artigo proposto tratava de automatos
-celulares utilizando algoritmos genéticos para fazer a evolução. Já a
-implementação proposta neste artigo é uma modificação que da evolução usando
+Neste trabalho foi feito uma pesquisa em cima de um artigo proposto e
+realizado uma nova implementação deste artigo. O artigo proposto tratava de
+automatos celulares utilizando algoritmos genéticos para fazer a evolução. Já
+a implementação proposta neste artigo é uma modificação que da evolução usando
 um algoritmo hibrido. Este foi implementado usando a Busca Tabu com parte dos
 genéticos (\textit{cross-over}). Os resultados obtidos não foram os esperados,
-por isso ainda é preciso avaliar melhor a implentação proposta para tentar
+por isso ainda é preciso avaliar melhor a implementação proposta para tentar
 encontrar possíveis erros.
 
 % ----------------------------------------------------------------------------
