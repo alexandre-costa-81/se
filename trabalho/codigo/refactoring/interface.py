@@ -64,7 +64,6 @@ class Interface(Frame):
         self.pack()
 
     def serviceToolbar(self, button):
-        print button
         if button == 'play':
             self.pause = False
             self.onPlay()
