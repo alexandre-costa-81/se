@@ -1,5 +1,7 @@
 from Tkinter import *
 
+import cellular_automata
+
 class Interface(Frame):
 
     def __init__(self, parent):
@@ -7,8 +9,10 @@ class Interface(Frame):
         
         self.parent = parent
         
+        self.points = 5        
         self.pause = True
         self.t = 0
+        self.ca = cellular_automata.CellularAutomata()
         
         self.initUI()
     
@@ -43,24 +47,27 @@ class Interface(Frame):
         exitButton = Button(toolbar, text='Quit', command=self.quit)
         exitButton.pack(side=RIGHT, padx=2, pady=2)
 
-        N = 100
-        XY = 5
-
-        canvas  = Canvas(
-            self.parent, width=N*XY, height=N*XY, highlightthickness=0, 
-            bd=0, bg='white'
+        self.canvas  = Canvas(
+            self.parent,
+            width=self.ca.lattice_size*self.points,
+            height=self.ca.lattice_size*self.points,
+            highlightthickness=0, 
+            bd=0,
+            bg='white'
         )
 
-        cell = [[0 for row in range(N)] for col in range(N)]
+        self.cell = [
+            [0 for y in range(self.ca.lattice_size)] 
+               for x in range(self.ca.lattice_size)]
 
-        for j in range(N):
-            for i in range(N):
-                cell[i][j] = canvas.create_rectangle(
-                    (i*XY, j*XY, i*XY+XY, j*XY+XY),outline="gray",fill="white"
+        for i in range(self.ca.lattice_size):
+            for j in range(self.ca.lattice_size):
+                self.cell[i][j] = self.canvas.create_rectangle(
+                    (i*self.points, j*self.points, i*self.points+self.points, j*self.points+self.points),outline="gray",fill="white"
                 )
 
         toolbar.pack(side=TOP, fill=X)
-        canvas.pack(side=TOP)
+        self.canvas.pack(side=TOP)
         self.pack()
 
     def serviceToolbar(self, button):
@@ -87,12 +94,22 @@ class Interface(Frame):
 
     def onNext(self):
         print ('next', self.t)
+
+        if self.t == 0:        
+            self.ca.population, self.ca.lattice, self.ca.life_time, self.ca.genetic_code = self.ca.generate_population(0)
+
         self.t += 1
+
+    def drawing(self):
+        for i in range(self.ca.lattice_size):
+            for j in range(self.ca.lattice_size):
+                if self.ca.lattice[i][j] == 1:
+                    self.canvas.itemconfig(self.cell[j][i], fill="yellow")
 
 def main():
   
     root = Tk()
-    app = Interface(root)
+    app = Interface(root)    
     root.mainloop()  
 
 
