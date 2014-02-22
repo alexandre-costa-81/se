@@ -11,20 +11,36 @@ Created: 15/01/2014
 
 class AutomatoCelular:
     def __init__(self):
-        self.maximo=2000
-        self.malha_tamanho=100
-        self.densidade_inicial=0.02
-        self.cromossomo_jovem=32
-        self.cromossomo_maduro=32
-        self.cromossomo_velho=32
-        self.quantidade_praga=0.4
-        self.praga_periodo=50
+        self.maximo = 2000
+        self.lattice_size = 100
+        self.initial_density = 0.02
+        self.youth_length = 32
+        self.mature_length = 32
+        self.old_length = 32
+        self.dose = 0.4
+        self.plague_period = 50
 
-        self.geracao=0
-        self.malha=[[0 for y in range(self.malha_tamanho)] 
-                       for x in range(self.malha_tamanho)]
-        self.cromossomo_idade=[[0 for y in range(self.malha_tamanho)] 
-                                  for x in range(self.malha_tamanho)]
+        self.generation = 0
 
+        self.lattice = [
+            [0 for y in range(self.lattice_size)]
+               for x in range(self.lattice_size)]
+
+        self.lattice_next = [
+            [0 for y in range(self.lattice_size)]
+               for x in range(self.lattice_size)]
+
+        self.life_time = [
+            [0 for y in range(self.lattice_size)]
+               for x in range(self.lattice_size)]
+
+        self.youth = [0 for x in range(self.youth_length)]
+        self.mature = [0 for x in range(self.mature_length)]
+        self.old = [0 for x in range(self.old_length)]
+
+        self.genetic_code = [
+            [[youth, mature, old] for y in range(lattice_size)]
+            for x in range(lattice_size)]
+        
  #   def processo_evolucao(self, iteracao):
         
