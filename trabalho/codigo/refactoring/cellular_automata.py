@@ -23,6 +23,9 @@ class CellularAutomata:
         self.plague_period = 50
         
         self.population = 0
+        self.population_youth = 0
+        self.population_mature = 0
+        self.population_old = 0
 
         self.generation = 0
 
@@ -30,17 +33,13 @@ class CellularAutomata:
             [0 for y in range(self.lattice_size)]
                for x in range(self.lattice_size)]
 
-        self.lattice_next = [
-            [0 for y in range(self.lattice_size)]
-               for x in range(self.lattice_size)]
+        self.lattice_next = self.lattice
 
         self.life_time = [
             [0 for y in range(self.lattice_size)]
                for x in range(self.lattice_size)]
 
-        self.life_time_next = [
-            [0 for y in range(self.lattice_size)]
-               for x in range(self.lattice_size)]
+        self.life_time_next = self.life_time
 
         self.youth = [0 for x in range(self.youth_length)]
         self.mature = [0 for x in range(self.mature_length)]
@@ -51,12 +50,7 @@ class CellularAutomata:
             for y in range(self.lattice_size)]
             for x in range(self.lattice_size)]
 
-        self.genetic_code_next = [
-            [[self.youth, self.mature, self.old]
-            for y in range(self.lattice_size)]
-            for x in range(self.lattice_size)]
-        
-        
+        self.genetic_code_next = self.genetic_code
         
     def generate_population(self, initial_density):
         if initial_density != 0:
@@ -84,7 +78,7 @@ class CellularAutomata:
 
         return x, self.lattice_next, self.life_time_next, self.genetic_code_next
 
-    def number_ones_alpha(self, alpha):
+    def number_ones_genetic_code(self, alpha):
         age = 0
         youth = 0
         mature = 0
@@ -106,9 +100,33 @@ class CellularAutomata:
 
 
         age = youth, mature, old
-
+        
         return age
 
+    def move_individuals(self):
+
+        self.lattice_next = self.lattice
+        self.life_time_next = self.life_time
+        self.genetic_code_next = self.genetic_code
+
+#        selecionado = random.randint(0,7)
+
+#        if selecionado == 0 and j > 0:
+#            if self.lattice[i][j-1] == 0 and self.lattice_next[i][j-1] == 0:
+        for i in range(self.lattice_size):
+            for j in range(self.lattice_size):
+                if self.lattice[i][j] == 1 and j < (self.lattice_size-1):
+                    if self.lattice[i][j+1] == 0:
+                        self.lattice_next[i][j+1] = 1
+                        self.life_time_next[i][j+1] = self.life_time_next[i][j]
+                        self.genetic_code_next[i][j+1] = self.genetic_code_next[i][j]
+                        self.lattice_next[i][j] = 0
+                        self.life_time_next[i][j] = 0
+                        self.genetic_code_next[i][j] = [self.youth, self.mature, self.old]
+
+        self.lattice = self.lattice_next
+        self.life_time = self.life_time_next
+        self.genetic_code = self.genetic_code_next
 
 def main():
     
@@ -116,7 +134,7 @@ def main():
     
     ac.population, ac.lattice, ac.life_time, ac.genetic_code = ac.generate_population(0)
     
-    print ac.lattice
+    print ac.population
 
 if __name__ == "__main__":
     main()

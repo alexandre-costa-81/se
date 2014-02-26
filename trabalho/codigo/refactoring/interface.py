@@ -93,18 +93,44 @@ class Interface(Frame):
             self.after(100, self.onPlay)
 
     def onNext(self):
-        print ('next', self.t)
 
         if self.t == 0:        
             self.ca.population, self.ca.lattice, self.ca.life_time, self.ca.genetic_code = self.ca.generate_population(0)
-
+        else:
+            self.ca.move_individuals()
+        self.drawing()
+       
         self.t += 1
+        
+        print ('Iteracao', self.t, 
+            'Population', self.ca.population,
+            'youth', self.ca.population_youth,
+            'mature', self.ca.population_mature,
+            'old', self.ca.population_old
+        )
 
     def drawing(self):
+    
+        self.ca.population_youth = 0
+        self.ca.population_mature = 0
+        self.ca.population_old = 0
+    
         for i in range(self.ca.lattice_size):
             for j in range(self.ca.lattice_size):
+            
                 if self.ca.lattice[i][j] == 1:
-                    self.canvas.itemconfig(self.cell[j][i], fill="yellow")
+                    youth, mature, old = self.ca.number_ones_genetic_code(self.ca.genetic_code[i][j]) 
+                    if self.ca.life_time[i][j] <= youth:
+                        self.ca.population_youth += 1
+                        self.canvas.itemconfig(self.cell[j][i], fill="yellow")
+                    elif self.ca.life_time[i][j] > youth and self.ca.life_time[i][j] <= (youth+mature):
+                        self.ca.population_mature += 1
+                        self.canvas.itemconfig(self.cell[j][i], fill="red")
+                    else:
+                        self.ca.population_old += 1
+                        self.canvas.itemconfig(self.cell[j][i], fill="blue")
+                elif self.ca.lattice[i][j] == 0:
+                    self.canvas.itemconfig(self.cell[j][i], fill="white")
 
 def main():
   
