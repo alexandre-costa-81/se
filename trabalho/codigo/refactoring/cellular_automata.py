@@ -12,15 +12,52 @@ Created: 15/01/2014
 import random
 
 class CellularAutomata:
-    def __init__(self):
-        self.maximo = 2000
-        self.lattice_size = 100
-        self.initial_density = 0.02
-        self.youth_length = 32
-        self.mature_length = 32
-        self.old_length = 32
-        self.dose = 0.4
-        self.plague_period = 50
+    maximo = None
+    lattice_size = None
+    initial_density = None
+    youth_length = None
+    mature_length = None
+    old_length = None
+    dose = None
+    plague_period = None
+
+    population = None
+    population_youth = None
+    population_mature = None
+    population_old = None
+
+    generation = None
+    
+    lattice = None
+    lattice_next = None
+    life_time = None
+    life_time_Next = None
+    
+    youth = None
+    mature = None
+    old = None
+    
+    genetic_code = None
+    genetic_code_Next = None
+
+    def __init__(self, 
+            maximo=2000, 
+            lattice_size=10, 
+            initial_density=0.02, 
+            youth_length=2,
+            mature_length=2,
+            old_length=2,
+            dose=0.4,
+            plague_period=50
+    ):
+        self.maximo = maximo
+        self.lattice_size = lattice_size
+        self.initial_density = initial_density
+        self.youth_length = youth_length
+        self.mature_length = mature_length
+        self.old_length = old_length
+        self.dose = dose
+        self.plague_period = plague_period
         
         self.population = 0
         self.population_youth = 0
@@ -127,14 +164,30 @@ class CellularAutomata:
         self.lattice = self.lattice_next
         self.life_time = self.life_time_next
         self.genetic_code = self.genetic_code_next
+        
+    def printMatrix(self, testMatrix):
+        print ' ',
+        for i in range(len(testMatrix[1])):  # Make it work with non square matrices.
+            print i,
+        print
+        for i, element in enumerate(testMatrix):
+            print i, ' '.join(str(element))
 
 def main():
     
-    ac = CellularAutomata()
+    ca = CellularAutomata()
     
-    ac.population, ac.lattice, ac.life_time, ac.genetic_code = ac.generate_population(0)
+    ca.population, ca.lattice, ca.life_time, ca.genetic_code = ca.generate_population(0)
     
-    print ac.population
+    print ("Population",ca.population)
+    print ("Lattice", ca.lattice)
+    #print ("Life_Time", ca.life_time)
+    #print ("genetic_code", ca.genetic_code)
+    
+    ca.move_individuals()
+    
+    ca.printMatrix(ca.lattice)
+    
 
 if __name__ == "__main__":
     main()
