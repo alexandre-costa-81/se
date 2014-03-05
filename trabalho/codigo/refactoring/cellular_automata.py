@@ -10,6 +10,7 @@ Created: 15/01/2014
 """
 
 import random
+from copy import copy, deepcopy
 
 class CellularAutomata:
     maximo = None
@@ -28,17 +29,14 @@ class CellularAutomata:
 
     generation = None
     
-    lattice = None
-    lattice_next = None
-    life_time = None
-    life_time_Next = None
+    lattice = []
+    life_time = []
+       
+    youth = []
+    mature = []
+    old = []
     
-    youth = None
-    mature = None
-    old = None
-    
-    genetic_code = None
-    genetic_code_Next = None
+    genetic_code = []
 
     def __init__(self, 
             maximo=2000, 
@@ -70,13 +68,9 @@ class CellularAutomata:
             [0 for y in range(self.lattice_size)]
                for x in range(self.lattice_size)]
 
-        self.lattice_next = self.lattice
-
         self.life_time = [
             [0 for y in range(self.lattice_size)]
                for x in range(self.lattice_size)]
-
-        self.life_time_next = self.life_time
 
         self.youth = [0 for x in range(self.youth_length)]
         self.mature = [0 for x in range(self.mature_length)]
@@ -86,34 +80,36 @@ class CellularAutomata:
             [[self.youth, self.mature, self.old]
             for y in range(self.lattice_size)]
             for x in range(self.lattice_size)]
-
-        self.genetic_code_next = self.genetic_code
         
     def generate_population(self, initial_density):
+        lattice_next = deepcopy(self.lattice)
+        life_time_next = deepcopy(self.life_time)
+        genetic_code_next = deepcopy(self.genetic_code)
+        
         if initial_density != 0:
             self.initial_density = initial_density 
         
         x = 0
-        
+        print self.initial_density
         while x < int(self.lattice_size*self.lattice_size*self.initial_density):
             i1 = random.randint(0,self.lattice_size-1)
             j1 = random.randint(0,self.lattice_size-1)
 
             randBinList = lambda n: [random.randint(0,1) for b in range(1,n+1)]
         
-            if self.lattice_next[i1][j1] == 1:
+            if lattice_next[i1][j1] == 1:
                 x -= 1
             else:
-                self.lattice_next[i1][j1] = 1
-                self.life_time_next[i1][j1] = 1
+                lattice_next[i1][j1] = 1
+                life_time_next[i1][j1] = 1
 
-                self.genetic_code_next[i1][j1][0] = randBinList(self.youth_length)
-                self.genetic_code_next[i1][j1][1] = randBinList(self.mature_length)
-                self.genetic_code_next[i1][j1][2] = randBinList(self.old_length)
+                genetic_code_next[i1][j1][0] = randBinList(self.youth_length)
+                genetic_code_next[i1][j1][1] = randBinList(self.mature_length)
+                genetic_code_next[i1][j1][2] = randBinList(self.old_length)
         
             x += 1
 
-        return x, self.lattice_next, self.life_time_next, self.genetic_code_next
+        return x, lattice_next, life_time_next, genetic_code_next
 
     def number_ones_genetic_code(self, alpha):
         age = 0
@@ -141,29 +137,36 @@ class CellularAutomata:
         return age
 
     def move_individuals(self):
-
-        self.lattice_next = self.lattice
-        self.life_time_next = self.life_time
-        self.genetic_code_next = self.genetic_code
-
+        deepcopy1d2d = lambda lVals: [x if not isinstance(x, list) else x[:] for x in lVals]
+        self.lattice_next = map(list, self.lattice)
+        cpy = deepcopy(self.lattice)
+        print(id(cpy), id(self.lattice))
+        #self.life_time_next = self.life_time[:]
+        #self.genetic_code_next = self.genetic_code[:]
+        #print(self.lattice_next is self.lattice)
 #        selecionado = random.randint(0,7)
 
 #        if selecionado == 0 and j > 0:
 #            if self.lattice[i][j-1] == 0 and self.lattice_next[i][j-1] == 0:
         for i in range(self.lattice_size):
             for j in range(self.lattice_size):
-                if self.lattice[i][j] == 1 and j < (self.lattice_size-1):
-                    if self.lattice[i][j+1] == 0:
-                        self.lattice_next[i][j+1] = 1
-                        self.life_time_next[i][j+1] = self.life_time_next[i][j]
-                        self.genetic_code_next[i][j+1] = self.genetic_code_next[i][j]
-                        self.lattice_next[i][j] = 0
-                        self.life_time_next[i][j] = 0
-                        self.genetic_code_next[i][j] = [self.youth, self.mature, self.old]
-
-        self.lattice = self.lattice_next
-        self.life_time = self.life_time_next
-        self.genetic_code = self.genetic_code_next
+                if self.lattice[i][j] == 1 and j < (self.lattice_size-1):# and self.lattice[i][j+1] == 0 and self.lattice_next[i][j+1] != 1:
+                    cpy[i][j+1] = int(1)
+                    print(id(cpy[i][j+1]), id(self.lattice[i][j+1]))
+                    print(id(cpy[i][j]), id(self.lattice[i][j]))
+                    #self.lattice_next[i][j+1] = self.life_time[i][j]
+                    #self.genetic_code_next[i][j+1] = self.genetic_code[i][j]
+                    cpy[i][j] = 0
+                    #self.life_time_next[i][j] = 0
+                    #self.genetic_code_next[i][j] = [self.youth, self.mature, self.old]
+                    #print(self.lattice_next is self.lattice)
+                    #print ("Lattice", self.lattice[i][j])
+                    #print ("Lattice Next", self.lattice_next[i][j])
+                    raw_input()
+                    
+        self.lattice = deepcopy(cpy)
+        #self.life_time = self.life_time_next
+        #self.genetic_code = self.genetic_code_next
         
     def printMatrix(self, testMatrix):
         print ' ',
@@ -179,10 +182,12 @@ def main():
     
     ca.population, ca.lattice, ca.life_time, ca.genetic_code = ca.generate_population(0)
     
-    print ("Population",ca.population)
-    print ("Lattice", ca.lattice)
+    #print ("Population",ca.population)
+    #print ("Lattice", ca.lattice)
     #print ("Life_Time", ca.life_time)
     #print ("genetic_code", ca.genetic_code)
+    
+    ca.printMatrix(ca.lattice)
     
     ca.move_individuals()
     
