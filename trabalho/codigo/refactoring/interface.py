@@ -88,15 +88,31 @@ class Interface(Frame):
 
     def onPlay(self):
         if not self.pause:
-            print ('play', self.t)
+            if self.t == 0:        
+                self.ca.generate_population()
+            else:
+                self.ca.move_individuals()
+
+            self.drawing()
+           
             self.t += 1
+            
+            print ('Iteracao', self.t, 
+                'Population', self.ca.population,
+                'youth', self.ca.population_youth,
+                'mature', self.ca.population_mature,
+                'old', self.ca.population_old
+            )
+            
             self.after(100, self.onPlay)
+
 
     def onNext(self):
 
         if self.t == 0:        
-            self.ca.population, self.ca.lattice, self.ca.life_time, self.ca.genetic_code = self.ca.generate_population(0)
+            self.ca.generate_population()
         else:
+            self.ca.evolution()
             self.ca.move_individuals()
         self.drawing()
        

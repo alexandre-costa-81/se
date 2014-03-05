@@ -10,7 +10,7 @@ Created: 15/01/2014
 """
 
 import random
-from copy import copy, deepcopy
+from copy import deepcopy
 
 class CellularAutomata:
     maximo = None
@@ -38,13 +38,14 @@ class CellularAutomata:
     
     genetic_code = []
 
+
     def __init__(self, 
             maximo=2000, 
-            lattice_size=10, 
+            lattice_size=100, 
             initial_density=0.02, 
-            youth_length=2,
-            mature_length=2,
-            old_length=2,
+            youth_length=32,
+            mature_length=32,
+            old_length=32,
             dose=0.4,
             plague_period=50
     ):
@@ -80,8 +81,9 @@ class CellularAutomata:
             [[self.youth, self.mature, self.old]
             for y in range(self.lattice_size)]
             for x in range(self.lattice_size)]
+
         
-    def generate_population(self, initial_density):
+    def generate_population(self, initial_density=0):
         lattice_next = deepcopy(self.lattice)
         life_time_next = deepcopy(self.life_time)
         genetic_code_next = deepcopy(self.genetic_code)
@@ -90,7 +92,7 @@ class CellularAutomata:
             self.initial_density = initial_density 
         
         x = 0
-        print self.initial_density
+
         while x < int(self.lattice_size*self.lattice_size*self.initial_density):
             i1 = random.randint(0,self.lattice_size-1)
             j1 = random.randint(0,self.lattice_size-1)
@@ -109,7 +111,11 @@ class CellularAutomata:
         
             x += 1
 
-        return x, lattice_next, life_time_next, genetic_code_next
+        self.population = x
+        self.lattice = lattice_next
+        self.life_time = life_time_next
+        self.genetic_code = genetic_code_next
+
 
     def number_ones_genetic_code(self, alpha):
         age = 0
@@ -131,43 +137,227 @@ class CellularAutomata:
                     if alpha[x][y] == 1:
                         old += 1
 
-
         age = youth, mature, old
         
         return age
 
     def move_individuals(self):
-        deepcopy1d2d = lambda lVals: [x if not isinstance(x, list) else x[:] for x in lVals]
-        self.lattice_next = map(list, self.lattice)
-        cpy = deepcopy(self.lattice)
-        print(id(cpy), id(self.lattice))
-        #self.life_time_next = self.life_time[:]
-        #self.genetic_code_next = self.genetic_code[:]
-        #print(self.lattice_next is self.lattice)
-#        selecionado = random.randint(0,7)
 
-#        if selecionado == 0 and j > 0:
-#            if self.lattice[i][j-1] == 0 and self.lattice_next[i][j-1] == 0:
+        lattice_next = deepcopy(self.lattice)
+        life_time_next = deepcopy(self.life_time)
+        genetic_code_next = deepcopy(self.genetic_code)
+
         for i in range(self.lattice_size):
             for j in range(self.lattice_size):
-                if self.lattice[i][j] == 1 and j < (self.lattice_size-1):# and self.lattice[i][j+1] == 0 and self.lattice_next[i][j+1] != 1:
-                    cpy[i][j+1] = int(1)
-                    print(id(cpy[i][j+1]), id(self.lattice[i][j+1]))
-                    print(id(cpy[i][j]), id(self.lattice[i][j]))
-                    #self.lattice_next[i][j+1] = self.life_time[i][j]
-                    #self.genetic_code_next[i][j+1] = self.genetic_code[i][j]
-                    cpy[i][j] = 0
-                    #self.life_time_next[i][j] = 0
-                    #self.genetic_code_next[i][j] = [self.youth, self.mature, self.old]
-                    #print(self.lattice_next is self.lattice)
-                    #print ("Lattice", self.lattice[i][j])
-                    #print ("Lattice Next", self.lattice_next[i][j])
-                    raw_input()
+                if self.lattice[i][j] == 1:
                     
-        self.lattice = deepcopy(cpy)
-        #self.life_time = self.life_time_next
-        #self.genetic_code = self.genetic_code_next
+                    selecionado = random.randint(0,7)
+                    
+                    if selecionado == 0 and j > 0:
+                        if self.lattice[i][j-1] == 0 and lattice_next[i][j-1] == 0:
+                            lattice_next[i][j-1] = self.lattice[i][j]
+                            life_time_next[i][j-1] = self.life_time[i][j]
+                            genetic_code_next[i][j-1] = self.genetic_code[i][j]
+                            lattice_next[i][j] = 0
+                            life_time_next[i][j] = 0
+                            genetic_code_next[i][j] = [self.youth, self.mature, self.old]
+                    
+                    if selecionado == 1 and j > 0 and i < (self.lattice_size-1):
+                        if self.lattice[i+1][j-1] == 0 and lattice_next[i+1][j-1] == 0:
+                            lattice_next[i+1][j-1] = self.lattice[i][j]
+                            life_time_next[i+1][j-1] = self.life_time[i][j]
+                            genetic_code_next[i+1][j-1] = self.genetic_code[i][j]
+                            lattice_next[i][j] = 0
+                            life_time_next[i][j] = 0
+                            genetic_code_next[i][j] = [self.youth, self.mature, self.old]
+                        
+                    if selecionado == 2 and i < (self.lattice_size-1):
+                        if self.lattice[i+1][j] == 0 and lattice_next[i+1][j] == 0:
+                            lattice_next[i+1][j] = self.lattice[i][j]
+                            life_time_next[i+1][j] = self.life_time[i][j]
+                            genetic_code_next[i+1][j] = self.genetic_code[i][j]
+                            lattice_next[i][j] = 0
+                            life_time_next[i][j] = 0
+                            genetic_code_next[i][j] = [self.youth, self.mature, self.old]
+                    
+                    if selecionado == 3 and i < (self.lattice_size-1) and j < (self.lattice_size-1):
+                        if self.lattice[i+1][j+1] == 0 and lattice_next[i+1][j+1] == 0:
+                            lattice_next[i+1][j+1] = self.lattice[i][j]
+                            life_time_next[i+1][j+1] = self.life_time[i][j]
+                            genetic_code_next[i+1][j+1] = self.genetic_code[i][j]
+                            lattice_next[i][j] = 0
+                            life_time_next[i][j] = 0
+                            genetic_code_next[i][j] = [self.youth, self.mature, self.old]
+                    
+                    if selecionado == 4 and j < (self.lattice_size-1):
+                        if self.lattice[i][j+1] == 0 and lattice_next[i][j+1] == 0:
+                            lattice_next[i][j+1] = self.lattice[i][j]
+                            life_time_next[i][j+1] = self.life_time[i][j]
+                            genetic_code_next[i][j+1] = self.genetic_code[i][j]
+                            lattice_next[i][j] = 0
+                            life_time_next[i][j] = 0
+                            genetic_code_next[i][j] = [self.youth, self.mature, self.old]
+                    
+                    if selecionado == 5 and j < (self.lattice_size-1) and i > 0:
+                        if self.lattice[i-1][j+1] == 0 and lattice_next[i-1][j+1] == 0:
+                            lattice_next[i-1][j+1] = self.lattice[i][j]
+                            life_time_next[i-1][j+1] = self.life_time[i][j]
+                            genetic_code_next[i-1][j+1] = self.genetic_code[i][j]
+                            lattice_next[i][j] = 0
+                            life_time_next[i][j] = 0
+                            genetic_code_next[i][j] = [self.youth, self.mature, self.old]
+                    
+                    if selecionado == 6 and i > 0:
+                        if self.lattice[i-1][j] == 0 and lattice_next[i-1][j] == 0: 
+                            lattice_next[i-1][j] = self.lattice[i][j]
+                            life_time_next[i-1][j] = self.life_time[i][j]
+                            genetic_code_next[i-1][j] = self.genetic_code[i][j]
+                            lattice_next[i][j] = 0
+                            life_time_next[i][j] = 0
+                            genetic_code_next[i][j] = [self.youth, self.mature, self.old]
+                    
+                    if selecionado == 7 and i > 0 and j > 0:
+                        if self.lattice[i-1][j-1] == 0 and lattice_next[i-1][j-1] == 0:
+                            lattice_next[i-1][j-1] = self.lattice[i][j]
+                            life_time_next[i-1][j-1] = self.life_time[i][j]
+                            genetic_code_next[i-1][j-1] = self.genetic_code[i][j]
+                            lattice_next[i][j] = 0
+                            life_time_next[i][j] = 0
+                            genetic_code_next[i][j] = [self.youth, self.mature, self.old]
+                    
+        self.lattice = deepcopy(lattice_next)
+        self.life_time = deepcopy(life_time_next)
+        self.genetic_code = deepcopy(genetic_code_next)
+
+
+    def find_two_mature_neighbors(self, i, j):
+        alpha1 = []
+        alpha2 = []
+        neighbors = 0
         
+        if j > 0:
+            if self.lattice[i][j-1] == 1 and neighbors < 2:
+                youth, mature, old = self.number_ones_genetic_code(self.genetic_code[i][j-1])
+                if self.life_time[i][j-1] > youth and self.life_time[i][j-1] <= (youth+mature):
+                    neighbors += 1
+                    if alpha1 == []:
+                        alpha1 = self.life_time[i][j-1]
+                    else:
+                        alpha2 = self.life_time[i][j-1]
+                
+        if i < (self.lattice_size-1) and j > 0:
+            if self.lattice[i+1][j-1] == 1 and neighbors < 2:
+                youth, mature, old = self.number_ones_genetic_code(self.genetic_code[i+1][j-1])
+                if self.life_time[i+1][j-1] > youth and self.life_time[i+1][j-1] <= (youth+mature):
+                    neighbors += 1
+                    if alpha1 == []:
+                        alpha1 = self.life_time[i+1][j-1]
+                    else:
+                        alpha2 = self.life_time[i+1][j-1]
+        
+        if i < (self.lattice_size-1):
+            if self.lattice[i+1][j] == 1 and neighbors < 2:
+                youth, mature, old = self.number_ones_genetic_code(self.genetic_code[i+1][j])
+                if self.life_time[i+1][j] > youth and self.life_time[i+1][j] <= (youth+mature):
+                    neighbors += 1
+                    if alpha1 == []:
+                        alpha1 = self.life_time[i+1][j]
+                    else:
+                        alpha2 = self.life_time[i+1][j]
+                    
+        if i < (self.lattice_size-1) and j < (self.lattice_size-1):
+            if self.lattice[i+1][j+1] == 1 and neighbors < 2:
+                youth, mature, old = self.number_ones_genetic_code(self.genetic_code[i+1][j+1])
+                if self.life_time[i+1][j+1] > youth and self.life_time[i+1][j+1] <= (youth+mature):
+                    neighbors += 1
+                    if alpha1 == []:
+                        alpha1 = self.life_time[i+1][j+1]
+                    else:
+                        alpha2 = self.life_time[i+1][j+1]
+        
+        if j < (self.lattice_size-1):
+            if self.lattice[i][j+1] == 1 and neighbors < 2:
+                youth, mature, old = self.number_ones_genetic_code(self.genetic_code[i][j+1])
+                if self.life_time[i][j+1] > youth and self.life_time[i][j+1] <= (youth+mature):
+                    neighbors += 1
+                    if alpha1 == []:
+                        alpha1 = self.life_time[i][j+1]
+                    else:
+                        alpha2 = self.life_time[i][j+1]
+
+        if i > 0 and j < (self.lattice_size-1):
+            if self.lattice[i-1][j+1] == 1 and neighbors < 2:
+                youth, mature, old = self.number_ones_genetic_code(self.genetic_code[i-1][j+1])
+                if self.life_time[i-1][j+1] > youth and self.life_time[i-1][j+1] <= (youth+mature):
+                    neighbors += 1
+                    if alpha1 == []:
+                        alpha1 = self.life_time[i-1][j+1]
+                    else:
+                        alpha2 = self.life_time[i-1][j+1]
+
+        if i > 0:
+            if self.lattice[i-1][j] == 1 and neighbors < 2:
+                youth, mature, old = self.number_ones_genetic_code(self.genetic_code[i-1][j])
+                if self.life_time[i-1][j] > youth and self.life_time[i-1][j] <= (youth+mature):
+                    neighbors += 1
+                    if alpha1 == []:
+                        alpha1 = self.life_time[i-1][j]
+                    else:
+                        alpha2 = self.life_time[i-1][j]
+
+        if i > 0 and j > 0:
+            if self.lattice[i-1][j-1] == 1 and neighbors < 2:
+                youth, mature, old = self.number_ones_genetic_code(self.genetic_code[i-1][j-1])
+                if self.life_time[i-1][j-1] > youth and self.life_time[i-1][j-1] <= (youth+mature):
+                    neighbors += 1
+                    if alpha1 == []:
+                        alpha1 = self.life_time[i-1][j-1]
+                    else:
+                        alpha2 = self.life_time[i-1][j-1]
+        
+        return alpha1, alpha2, neighbors
+
+    def pk(self, alpha, k):
+        youth, mature, old = self.number_ones_genetic_code(alpha)
+
+        if (youth+mature+old) >= k:
+            return k
+        else:
+            return (youth+mature+old)
+
+    def evolution(self):
+        
+        lattice_next = deepcopy(self.lattice)
+        life_time_next = deepcopy(self.life_time)
+        genetic_code_next = deepcopy(self.genetic_code)
+        
+        for i in range(self.lattice_size):
+            for j in range(self.lattice_size):
+                
+                if self.lattice[i][j] == 0:
+                    alpha1, alpha2, neighbors = self.find_two_mature_neighbors(i, j)
+                    if neighbors == 2:
+                        lattice_next[i][j] = 1
+                        life_time_next[i][j] = 1
+                        genetic_code_next[i][j] = alpha1 if random.random() > 0.5 else alpha2
+                
+                elif self.lattice[i][j] == 1:
+                    youth, mature, old = self.number_ones_genetic_code(self.genetic_code[i][j])
+                    age = (youth+mature+old)
+                    if self.pk(self.genetic_code[i][j], self.life_time[i][j]) == age:
+                        lattice_next[i][j] = 0
+                        life_time_next[i][j] = 0
+                        genetic_code_next[i][j] = [self.youth, self.mature, self.old]
+                    else:
+                        life_time_next[i][j] = self.pk(self.genetic_code[i][j], self.life_time[i][j])
+                        life_time_next[i][j] += 1
+                        
+                    
+        self.lattice = deepcopy(lattice_next)
+        self.life_time = deepcopy(life_time_next)
+        self.genetic_code = deepcopy(genetic_code_next)
+
+
     def printMatrix(self, testMatrix):
         print ' ',
         for i in range(len(testMatrix[1])):  # Make it work with non square matrices.
@@ -176,22 +366,20 @@ class CellularAutomata:
         for i, element in enumerate(testMatrix):
             print i, ' '.join(str(element))
 
+
 def main():
     
     ca = CellularAutomata()
     
-    ca.population, ca.lattice, ca.life_time, ca.genetic_code = ca.generate_population(0)
+    ca.generate_population()
     
-    #print ("Population",ca.population)
-    #print ("Lattice", ca.lattice)
-    #print ("Life_Time", ca.life_time)
-    #print ("genetic_code", ca.genetic_code)
+    print ("Population",ca.population)
     
-    ca.printMatrix(ca.lattice)
-    
+    #ca.printMatrix(ca.lattice)
+    ca.evolution()
     ca.move_individuals()
     
-    ca.printMatrix(ca.lattice)
+    #ca.printMatrix(ca.lattice)
     
 
 if __name__ == "__main__":
