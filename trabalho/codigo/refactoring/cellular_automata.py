@@ -241,9 +241,9 @@ class CellularAutomata:
                 if self.life_time[i][j-1] > youth and self.life_time[i][j-1] <= (youth+mature):
                     neighbors += 1
                     if alpha1 == []:
-                        alpha1 = self.life_time[i][j-1]
+                        alpha1 = self.genetic_code[i][j-1]
                     else:
-                        alpha2 = self.life_time[i][j-1]
+                        alpha2 = self.genetic_code[i][j-1]
                 
         if i < (self.lattice_size-1) and j > 0:
             if self.lattice[i+1][j-1] == 1 and neighbors < 2:
@@ -251,9 +251,9 @@ class CellularAutomata:
                 if self.life_time[i+1][j-1] > youth and self.life_time[i+1][j-1] <= (youth+mature):
                     neighbors += 1
                     if alpha1 == []:
-                        alpha1 = self.life_time[i+1][j-1]
+                        alpha1 = self.genetic_code[i+1][j-1]
                     else:
-                        alpha2 = self.life_time[i+1][j-1]
+                        alpha2 = self.genetic_code[i+1][j-1]
         
         if i < (self.lattice_size-1):
             if self.lattice[i+1][j] == 1 and neighbors < 2:
@@ -261,9 +261,9 @@ class CellularAutomata:
                 if self.life_time[i+1][j] > youth and self.life_time[i+1][j] <= (youth+mature):
                     neighbors += 1
                     if alpha1 == []:
-                        alpha1 = self.life_time[i+1][j]
+                        alpha1 = self.genetic_code[i+1][j]
                     else:
-                        alpha2 = self.life_time[i+1][j]
+                        alpha2 = self.genetic_code[i+1][j]
                     
         if i < (self.lattice_size-1) and j < (self.lattice_size-1):
             if self.lattice[i+1][j+1] == 1 and neighbors < 2:
@@ -271,9 +271,9 @@ class CellularAutomata:
                 if self.life_time[i+1][j+1] > youth and self.life_time[i+1][j+1] <= (youth+mature):
                     neighbors += 1
                     if alpha1 == []:
-                        alpha1 = self.life_time[i+1][j+1]
+                        alpha1 = self.genetic_code[i+1][j+1]
                     else:
-                        alpha2 = self.life_time[i+1][j+1]
+                        alpha2 = self.genetic_code[i+1][j+1]
         
         if j < (self.lattice_size-1):
             if self.lattice[i][j+1] == 1 and neighbors < 2:
@@ -281,9 +281,9 @@ class CellularAutomata:
                 if self.life_time[i][j+1] > youth and self.life_time[i][j+1] <= (youth+mature):
                     neighbors += 1
                     if alpha1 == []:
-                        alpha1 = self.life_time[i][j+1]
+                        alpha1 = self.genetic_code[i][j+1]
                     else:
-                        alpha2 = self.life_time[i][j+1]
+                        alpha2 = self.genetic_code[i][j+1]
 
         if i > 0 and j < (self.lattice_size-1):
             if self.lattice[i-1][j+1] == 1 and neighbors < 2:
@@ -291,9 +291,9 @@ class CellularAutomata:
                 if self.life_time[i-1][j+1] > youth and self.life_time[i-1][j+1] <= (youth+mature):
                     neighbors += 1
                     if alpha1 == []:
-                        alpha1 = self.life_time[i-1][j+1]
+                        alpha1 = self.genetic_code[i-1][j+1]
                     else:
-                        alpha2 = self.life_time[i-1][j+1]
+                        alpha2 = self.genetic_code[i-1][j+1]
 
         if i > 0:
             if self.lattice[i-1][j] == 1 and neighbors < 2:
@@ -301,9 +301,9 @@ class CellularAutomata:
                 if self.life_time[i-1][j] > youth and self.life_time[i-1][j] <= (youth+mature):
                     neighbors += 1
                     if alpha1 == []:
-                        alpha1 = self.life_time[i-1][j]
+                        alpha1 = self.genetic_code[i-1][j]
                     else:
-                        alpha2 = self.life_time[i-1][j]
+                        alpha2 = self.genetic_code[i-1][j]
 
         if i > 0 and j > 0:
             if self.lattice[i-1][j-1] == 1 and neighbors < 2:
@@ -311,9 +311,9 @@ class CellularAutomata:
                 if self.life_time[i-1][j-1] > youth and self.life_time[i-1][j-1] <= (youth+mature):
                     neighbors += 1
                     if alpha1 == []:
-                        alpha1 = self.life_time[i-1][j-1]
+                        alpha1 = self.genetic_code[i-1][j-1]
                     else:
-                        alpha2 = self.life_time[i-1][j-1]
+                        alpha2 = self.genetic_code[i-1][j-1]
         
         return alpha1, alpha2, neighbors
 

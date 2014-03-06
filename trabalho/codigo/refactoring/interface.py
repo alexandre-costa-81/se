@@ -91,6 +91,7 @@ class Interface(Frame):
             if self.t == 0:        
                 self.ca.generate_population()
             else:
+                self.ca.evolution()
                 self.ca.move_individuals()
 
             self.drawing()
@@ -104,7 +105,7 @@ class Interface(Frame):
                 'old', self.ca.population_old
             )
             
-            self.after(100, self.onPlay)
+            self.after(10, self.onPlay)
 
 
     def onNext(self):
@@ -126,27 +127,35 @@ class Interface(Frame):
         )
 
     def drawing(self):
-    
-        self.ca.population_youth = 0
-        self.ca.population_mature = 0
-        self.ca.population_old = 0
+
+        population_youth = 0
+        population_mature = 0
+        population_old = 0
+        population = 0
     
         for i in range(self.ca.lattice_size):
             for j in range(self.ca.lattice_size):
-            
+
                 if self.ca.lattice[i][j] == 1:
+                    population += 1
                     youth, mature, old = self.ca.number_ones_genetic_code(self.ca.genetic_code[i][j]) 
                     if self.ca.life_time[i][j] <= youth:
-                        self.ca.population_youth += 1
+                        population_youth += 1
                         self.canvas.itemconfig(self.cell[j][i], fill="yellow")
                     elif self.ca.life_time[i][j] > youth and self.ca.life_time[i][j] <= (youth+mature):
-                        self.ca.population_mature += 1
+                        population_mature += 1
                         self.canvas.itemconfig(self.cell[j][i], fill="red")
                     else:
-                        self.ca.population_old += 1
+                        population_old += 1
                         self.canvas.itemconfig(self.cell[j][i], fill="blue")
                 elif self.ca.lattice[i][j] == 0:
                     self.canvas.itemconfig(self.cell[j][i], fill="white")
+                    
+        self.ca.population_youth = population_youth
+        self.ca.population_mature = population_mature
+        self.ca.population_old = population_old
+        self.ca.population = population
+
 
 def main():
   
